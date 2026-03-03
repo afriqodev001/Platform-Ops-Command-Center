@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Catalog &amp; Health Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#182430",
+                        "surface-border": "#2a3b4d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display overflow-hidden h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-surface-border bg-white dark:bg-surface-dark px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-slate-900 dark:text-white">
+<div class="size-8 rounded bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Ops Command Center</h2>
+</div>
+<!-- Global Search -->
+<label class="flex flex-col min-w-40 !h-9 w-96">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-surface-border bg-slate-50 dark:bg-[#1f2e3d] overflow-hidden focus-within:ring-2 ring-primary/50 transition-all">
+<div class="text-slate-400 dark:text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-sm font-normal leading-normal" placeholder="Search services, teams, or incidents..." value=""/>
+<div class="text-slate-400 dark:text-slate-500 flex items-center justify-center pr-3 text-xs font-mono">⌘K</div>
+</div>
+</label>
+</div>
+<div class="flex items-center gap-6">
+<nav class="flex items-center gap-6 hidden md:flex">
+<a class="text-primary font-medium text-sm leading-normal border-b-2 border-primary py-1" href="#">Catalog</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Incidents</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Runbooks</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-3 pl-6 border-l border-slate-200 dark:border-surface-border">
+<button class="size-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 ring-2 ring-slate-200 dark:ring-surface-border" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDXv93gZ5WwFsfbpj8RYXrF3ekZV6mbSc_PAjYy9yrz-yEnuHRzXBruLh0h6O0m2tleW5hopNd0OA9BcpBUetBdXk3pfCCgHUYDKdecfMjoHwrH8dsOc8oDC5mOHk06VlXqgz3vwsT-B12uooS5-Dw8Tr8vY6sWjRqgjNmkcNxHvD27-0V3BX3thmSShzzTV5W5fHbni8pSMJXDOYZjina3OzJK79EUq79syMHJqy-U-2CzmOwj8V0o4ccvfDXKqz_yvO5bZwu2JlKE");'></div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Page Header & Filters -->
+<div class="px-6 py-5 flex flex-col gap-5 border-b border-slate-200 dark:border-surface-border bg-white dark:bg-surface-dark shadow-sm z-10">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Service Catalog</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage and monitor microservices health across all environments.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Register Service</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-3 items-center">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-surface-border bg-white dark:bg-[#1f2e3d] text-sm text-slate-600 dark:text-slate-300 hover:border-primary/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[18px] text-slate-400 group-hover:text-primary">group</span>
+<span class="font-medium">Owner:</span>
+<span>All Teams</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">arrow_drop_down</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-surface-border bg-white dark:bg-[#1f2e3d] text-sm text-slate-600 dark:text-slate-300 hover:border-primary/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[18px] text-slate-400 group-hover:text-primary">layers</span>
+<span class="font-medium">Tier:</span>
+<span>All Tiers</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">arrow_drop_down</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-surface-border bg-white dark:bg-[#1f2e3d] text-sm text-slate-600 dark:text-slate-300 hover:border-primary/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[18px] text-slate-400 group-hover:text-primary">dns</span>
+<span class="font-medium">Env:</span>
+<span class="text-primary font-semibold">Production</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400">arrow_drop_down</span>
+</div>
+<div class="w-px h-6 bg-slate-200 dark:bg-surface-border mx-1"></div>
+<button class="text-slate-500 hover:text-primary text-sm font-medium transition-colors">Clear Filters</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-auto p-6">
+<div class="rounded-xl border border-slate-200 dark:border-surface-border bg-white dark:bg-surface-dark overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-[#1f2e3d]/50 border-b border-slate-200 dark:border-surface-border">
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-1/4">Service Name</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tier</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Owner Team</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Health</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Last Deploy</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-1/5">SLO Status</th>
+<th class="px-5 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-10"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-surface-border">
+<!-- Row 1 (Active/Selected) -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#1f2e3d] bg-primary/5 dark:bg-primary/10 cursor-pointer transition-colors border-l-4 border-l-primary">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-white dark:bg-[#1f2e3d] shadow-sm border border-slate-200 dark:border-surface-border">
+<span class="material-symbols-outlined text-primary text-[20px]">shopping_cart</span>
+</div>
+<div>
+<div class="font-semibold text-slate-900 dark:text-white">Checkout Service</div>
+<div class="text-xs text-slate-500">v2.4.1</div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                        Tier 1
+                                    </span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">CS</span>
+<span class="text-sm text-slate-700 dark:text-slate-300">Checkout Squad</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-sm">
+<span class="material-symbols-outlined text-[18px] fill-current">check_circle</span>
+<span>Healthy</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="text-sm text-slate-600 dark:text-slate-400">2h ago</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs">
+<span class="text-slate-700 dark:text-slate-300 font-medium">99.99%</span>
+<span class="text-slate-400">Target: 99.9%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-[#1f2e3d] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 99%;"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">chevron_right</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#1f2e3d] cursor-pointer transition-colors border-l-4 border-l-transparent hover:border-l-slate-300 dark:hover:border-l-slate-600">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-white dark:bg-[#1f2e3d] shadow-sm border border-slate-200 dark:border-surface-border">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">payments</span>
+</div>
+<div>
+<div class="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Payment Gateway</div>
+<div class="text-xs text-slate-500">v1.8.3</div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                        Tier 1
+                                    </span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">PS</span>
+<span class="text-sm text-slate-700 dark:text-slate-300">Payments Squad</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-1.5 text-amber-500 font-medium text-sm">
+<span class="material-symbols-outlined text-[18px] fill-current">warning</span>
+<span>Degraded</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="text-sm text-slate-600 dark:text-slate-400">5h ago</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs">
+<span class="text-amber-500 font-medium">98.45%</span>
+<span class="text-slate-400">Target: 99.9%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-[#1f2e3d] rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 80%;"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">chevron_right</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#1f2e3d] cursor-pointer transition-colors border-l-4 border-l-transparent hover:border-l-slate-300 dark:hover:border-l-slate-600">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-white dark:bg-[#1f2e3d] shadow-sm border border-slate-200 dark:border-surface-border">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">inventory_2</span>
+</div>
+<div>
+<div class="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Inventory API</div>
+<div class="text-xs text-slate-500">v3.0.0</div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                        Tier 2
+                                    </span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">CP</span>
+<span class="text-sm text-slate-700 dark:text-slate-300">Core Platform</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-sm">
+<span class="material-symbols-outlined text-[18px] fill-current">check_circle</span>
+<span>Healthy</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="text-sm text-slate-600 dark:text-slate-400">1d ago</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs">
+<span class="text-slate-700 dark:text-slate-300 font-medium">99.8%</span>
+<span class="text-slate-400">Target: 99.5%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-[#1f2e3d] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 98%;"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">chevron_right</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#1f2e3d] cursor-pointer transition-colors border-l-4 border-l-transparent hover:border-l-slate-300 dark:hover:border-l-slate-600">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-white dark:bg-[#1f2e3d] shadow-sm border border-slate-200 dark:border-surface-border">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">notifications_active</span>
+</div>
+<div>
+<div class="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Notification Service</div>
+<div class="text-xs text-slate-500">v1.2.1</div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                        Tier 3
+                                    </span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">GT</span>
+<span class="text-sm text-slate-700 dark:text-slate-300">Growth Team</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-1.5 text-rose-500 font-medium text-sm">
+<span class="material-symbols-outlined text-[18px] fill-current">error</span>
+<span>Critical</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="text-sm text-slate-600 dark:text-slate-400">30m ago</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs">
+<span class="text-rose-500 font-medium">85.00%</span>
+<span class="text-slate-400">Target: 99.0%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-[#1f2e3d] rounded-full overflow-hidden">
+<div class="h-full bg-rose-500 rounded-full" style="width: 40%;"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">chevron_right</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#1f2e3d] cursor-pointer transition-colors border-l-4 border-l-transparent hover:border-l-slate-300 dark:hover:border-l-slate-600">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-white dark:bg-[#1f2e3d] shadow-sm border border-slate-200 dark:border-surface-border">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[20px]">person_search</span>
+</div>
+<div>
+<div class="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">User Profile SVC</div>
+<div class="text-xs text-slate-500">v4.1.0</div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                        Tier 2
+                                    </span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">IT</span>
+<span class="text-sm text-slate-700 dark:text-slate-300">Identity Team</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-sm">
+<span class="material-symbols-outlined text-[18px] fill-current">check_circle</span>
+<span>Healthy</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="text-sm text-slate-600 dark:text-slate-400">4h ago</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs">
+<span class="text-slate-700 dark:text-slate-300 font-medium">99.99%</span>
+<span class="text-slate-400">Target: 99.9%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-[#1f2e3d] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">chevron_right</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Slide-out Panel (Partially Open) -->
+<aside class="w-[450px] bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-surface-border flex flex-col shadow-2xl relative z-30 transform transition-transform duration-300 ease-in-out">
+<!-- Header -->
+<div class="px-6 py-4 border-b border-slate-200 dark:border-surface-border flex items-start justify-between bg-slate-50 dark:bg-[#1f2e3d]/30">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Checkout Service</h2>
+<a class="text-primary hover:text-primary/80" href="#">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Production</span>
+<span>•</span>
+<span>us-east-1</span>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Content Scroll Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Golden Signals -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Golden Signals (1h)</h3>
+<div class="text-xs text-primary cursor-pointer hover:underline">View Dashboards</div>
+</div>
+<div class="grid gap-4">
+<!-- Latency Card -->
+<div class="p-4 rounded-lg border border-slate-200 dark:border-surface-border bg-slate-50 dark:bg-[#1f2e3d]/30">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Latency (p99)</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">124ms</span>
+</div>
+<!-- Mock Chart -->
+<div class="h-16 w-full flex items-end gap-1">
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[30%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[45%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[35%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[60%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[50%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[75%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[40%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[55%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[30%]"></div>
+<div class="bg-primary/30 hover:bg-primary/50 w-full rounded-t-sm h-[20%]"></div>
+</div>
+</div>
+<!-- Error Rate Card -->
+<div class="p-4 rounded-lg border border-slate-200 dark:border-surface-border bg-slate-50 dark:bg-[#1f2e3d]/30">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Error Rate</span>
+<span class="text-sm font-bold text-emerald-500">0.01%</span>
+</div>
+<!-- Mock Chart -->
+<div class="h-16 w-full flex items-end gap-1">
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[5%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[2%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[8%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[3%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[0%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[4%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[2%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[1%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[3%]"></div>
+<div class="bg-emerald-500/20 w-full rounded-t-sm h-[2%]"></div>
+</div>
+</div>
+<!-- Throughput Card -->
+<div class="p-4 rounded-lg border border-slate-200 dark:border-surface-border bg-slate-50 dark:bg-[#1f2e3d]/30">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Throughput</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">1.2k rps</span>
+</div>
+<!-- Mock Chart -->
+<div class="h-16 w-full flex items-end gap-1">
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[60%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[65%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[70%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[68%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[72%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[80%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[75%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[70%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[65%]"></div>
+<div class="bg-blue-400/30 w-full rounded-t-sm h-[60%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dependency Graph -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dependencies</h3>
+<div class="flex gap-2">
+<span class="size-2 rounded-full bg-emerald-500 ring-2 ring-emerald-500/30"></span>
+<span class="size-2 rounded-full bg-slate-600"></span>
+</div>
+</div>
+<div class="w-full aspect-square bg-[#111a22] rounded-xl border border-slate-200 dark:border-surface-border relative overflow-hidden flex items-center justify-center p-4">
+<div class="absolute inset-0 bg-[radial-gradient(#2a3b4d_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+<!-- Graph Visual Representation using CSS/Flex -->
+<div class="relative w-full h-full flex flex-col justify-center items-center gap-12">
+<!-- Upstream -->
+<div class="flex gap-8">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="size-10 rounded-full bg-surface-dark border border-surface-border flex items-center justify-center shadow-lg group-hover:border-primary transition-colors z-10">
+<span class="material-symbols-outlined text-slate-400 text-sm">public</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">Public API</span>
+</div>
+</div>
+<!-- Connector Lines -->
+<svg class="absolute inset-0 pointer-events-none w-full h-full" style="z-index: 0;">
+<!-- Line from Public API to Checkout -->
+<path d="M210 100 L 210 170" fill="none" stroke="#334155" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<!-- Lines from Checkout to Downstream -->
+<path d="M210 210 L 140 280" fill="none" stroke="#334155" stroke-width="1.5"></path>
+<path d="M210 210 L 210 280" fill="none" stroke="#334155" stroke-width="1.5"></path>
+<path d="M210 210 L 280 280" fill="none" stroke="#334155" stroke-width="1.5"></path>
+</svg>
+<!-- Main Node -->
+<div class="relative z-10">
+<div class="size-14 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(19,127,236,0.3)]">
+<span class="material-symbols-outlined text-primary text-xl">shopping_cart</span>
+</div>
+<div class="absolute -right-2 -top-1 size-3 bg-emerald-500 rounded-full border-2 border-[#111a22]"></div>
+</div>
+<!-- Downstream -->
+<div class="flex gap-8">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="size-10 rounded-full bg-surface-dark border border-surface-border flex items-center justify-center shadow-lg group-hover:border-primary transition-colors z-10">
+<span class="material-symbols-outlined text-slate-400 text-sm">payments</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">Payment</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="size-10 rounded-full bg-surface-dark border border-surface-border flex items-center justify-center shadow-lg group-hover:border-primary transition-colors z-10">
+<span class="material-symbols-outlined text-slate-400 text-sm">inventory_2</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">Inventory</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="size-10 rounded-full bg-surface-dark border border-surface-border flex items-center justify-center shadow-lg group-hover:border-primary transition-colors z-10">
+<span class="material-symbols-outlined text-slate-400 text-sm">database</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">DB Cluster</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">Latest Incidents</h3>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1f2e3d]/50 transition-colors cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-surface-border">
+<span class="material-symbols-outlined text-rose-500 text-lg mt-0.5">warning</span>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white leading-tight">High Latency in US-West Region</p>
+<p class="text-xs text-slate-500 mt-1">Resolved • 2 days ago</p>
+</div>
+</div>
+</div>
+</section>
+<div class="pt-4 mt-4 border-t border-slate-200 dark:border-surface-border">
+<button class="w-full py-2 px-4 rounded-lg bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-surface-border text-slate-900 dark:text-white text-sm font-medium hover:bg-slate-200 dark:hover:bg-[#2a3b4d] transition-colors">
+                        View Service Settings
+                    </button>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

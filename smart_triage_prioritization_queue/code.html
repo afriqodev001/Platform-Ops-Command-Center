@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Triage &amp; Prioritization Queue</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-dark": "#0b5db0",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#18232e",
+                        "surface-highlight": "#233648",
+                        "border-dark": "#2d3f52",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for high density lists */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #18232e;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2d3f52;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3e546b;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 h-screen overflow-hidden flex flex-col font-display selection:bg-primary selection:text-white">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-border-dark bg-background-dark px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">hub</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">OpsCommand</h2>
+</div>
+<nav class="flex items-center gap-6 hidden md:flex">
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-white border-b-2 border-primary pb-[14px] -mb-[14px] text-sm font-medium leading-normal" href="#">Triage Queue</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">Incidents</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">Services</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:flex items-center">
+<span class="absolute left-3 text-slate-400 material-symbols-outlined text-[20px]">search</span>
+<input class="w-64 bg-surface-highlight border-none rounded-lg py-2 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:ring-1 focus:ring-primary" placeholder="Search clusters, services..." type="text"/>
+</div>
+<button class="relative text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-red-500 rounded-full border-2 border-background-dark"></span>
+</button>
+<div class="size-8 rounded-full bg-surface-highlight overflow-hidden border border-border-dark">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="User profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSTIwGX_W2G_6Hnldo-PF4Y71wbScx4dTIGXDqfzFqwwyYsDYgbsXVBnD3ggCOupU5WlXaduzYNzNKignEx5c8RLJ3OJ_anZyS9OEQZ_gHZU61oRHt1XNOyZ4ayO7bVQZo5b7rRcaleZ3xRaRkdjn-w4EO7aDQ8CC-29iaT5RTjCvlOwp9EZnnIbgJ5kpVk-HJAGaIBDuIplPIZTHHzTrdu5VLoyNmSNUFNUMQrCjCgd0GnadeVwXENZa6x_6_0CimKdxSpx6cioSB"/>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Left Sidebar / Filters (Collapsible) -->
+<aside class="w-16 lg:w-64 bg-surface-dark border-r border-border-dark flex flex-col shrink-0 transition-all duration-300">
+<div class="p-4 flex flex-col gap-2">
+<button class="flex items-center gap-3 bg-primary/10 text-primary w-full px-4 py-3 rounded-lg hover:bg-primary/20 transition-colors group">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-medium text-sm hidden lg:block">Smart Filters</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto px-4 py-2 space-y-6 hidden lg:block custom-scrollbar">
+<!-- Status Filter -->
+<div>
+<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Status</h3>
+<div class="space-y-1">
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer">
+<input checked="" class="rounded border-slate-600 bg-surface-highlight text-primary focus:ring-offset-background-dark focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-300">Open</span>
+<span class="ml-auto text-xs text-slate-500">24</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer">
+<input class="rounded border-slate-600 bg-surface-highlight text-primary focus:ring-offset-background-dark focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-300">Acknowledged</span>
+<span class="ml-auto text-xs text-slate-500">8</span>
+</label>
+</div>
+</div>
+<!-- Severity Filter -->
+<div>
+<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Severity</h3>
+<div class="space-y-1">
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer group">
+<div class="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+<span class="text-sm text-slate-300 group-hover:text-white">Critical</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer group">
+<div class="w-2 h-2 rounded-full bg-orange-500"></div>
+<span class="text-sm text-slate-300 group-hover:text-white">High</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer group">
+<div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+<span class="text-sm text-slate-300 group-hover:text-white">Warning</span>
+</label>
+</div>
+</div>
+<!-- Source Filter -->
+<div>
+<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Source</h3>
+<div class="space-y-1">
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">dns</span>
+<span class="text-sm text-slate-300">BigPanda</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">monitoring</span>
+<span class="text-sm text-slate-300">Datadog</span>
+</label>
+<label class="flex items-center gap-3 p-2 rounded hover:bg-surface-highlight cursor-pointer">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">cloud_queue</span>
+<span class="text-sm text-slate-300">AWS CloudWatch</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-border-dark hidden lg:block">
+<button class="text-sm text-slate-400 hover:text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                    Save View
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-background-dark relative">
+<!-- Header Section -->
+<div class="px-6 py-6 border-b border-border-dark bg-gradient-to-r from-background-dark to-surface-dark">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+<div>
+<h1 class="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+                            Smart Triage Queue
+                            <span class="px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary border border-primary/20">Live</span>
+</h1>
+<p class="text-slate-400 text-sm mt-1">
+                            Prioritized by <span class="text-slate-200 font-medium">AI Impact Score</span> &amp; <span class="text-slate-200 font-medium">Blast Radius</span> analysis.
+                        </p>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm text-slate-400">Sort by:</span>
+<select class="bg-surface-highlight border-border-dark text-white text-sm rounded-md focus:ring-primary focus:border-primary">
+<option>Impact Score (High to Low)</option>
+<option>Time (Newest First)</option>
+<option>Severity</option>
+</select>
+<button class="p-2 text-slate-400 hover:text-white bg-surface-highlight rounded-md border border-border-dark">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</div>
+<!-- Stats Overview -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface-highlight/50 border border-border-dark rounded-lg p-4 flex flex-col relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-slate-400 text-xs font-medium uppercase mb-1">Critical Clusters</span>
+<div class="flex items-end justify-between">
+<span class="text-2xl font-bold text-white">12</span>
+<span class="text-xs font-medium text-red-400 flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +2%
+                            </span>
+</div>
+</div>
+<div class="bg-surface-highlight/50 border border-border-dark rounded-lg p-4 flex flex-col relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-slate-400 text-xs font-medium uppercase mb-1">High Priority</span>
+<div class="flex items-end justify-between">
+<span class="text-2xl font-bold text-white">5</span>
+<span class="text-xs font-medium text-orange-400 flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +1%
+                            </span>
+</div>
+</div>
+<div class="bg-surface-highlight/50 border border-border-dark rounded-lg p-4 flex flex-col relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-slate-400 text-xs font-medium uppercase mb-1">MTTR (Avg)</span>
+<div class="flex items-end justify-between">
+<span class="text-2xl font-bold text-white">15m</span>
+<span class="text-xs font-medium text-green-400 flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_down</span> -5%
+                            </span>
+</div>
+</div>
+<div class="bg-surface-highlight/50 border border-border-dark rounded-lg p-4 flex flex-col relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-slate-400 text-xs font-medium uppercase mb-1">System Health</span>
+<div class="flex items-end justify-between">
+<span class="text-2xl font-bold text-white">98.2%</span>
+<span class="text-xs font-medium text-slate-400 flex items-center">
+                                Stable
+                            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Scrollable Queue List -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-3">
+<!-- Incident Card 1 (Top Priority) -->
+<div class="group relative bg-surface-highlight border-l-4 border-l-red-500 rounded-r-lg p-4 hover:bg-[#2a3f55] transition-all cursor-pointer shadow-lg shadow-black/20">
+<div class="flex gap-4">
+<!-- Rank/Score -->
+<div class="flex flex-col items-center justify-start min-w-[60px] border-r border-border-dark pr-4">
+<span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Rank</span>
+<span class="text-2xl font-black text-white">#1</span>
+<div class="mt-2 flex flex-col items-center">
+<span class="text-[10px] text-slate-400 uppercase">Score</span>
+<div class="w-10 h-10 rounded-full border-2 border-red-500 flex items-center justify-center bg-red-500/10">
+<span class="text-xs font-bold text-red-400">98</span>
+</div>
+</div>
+</div>
+<!-- Content -->
+<div class="flex-1 min-w-0">
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-white font-semibold text-lg truncate">Database Latency Spike - US East Region</h3>
+<span class="bg-red-500/20 text-red-400 text-xs px-2 py-0.5 rounded border border-red-500/30 font-medium">Critical</span>
+<span class="bg-surface-dark text-slate-400 text-xs px-2 py-0.5 rounded border border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">dns</span> BigPanda Cluster
+                                        </span>
+</div>
+<p class="text-sm text-slate-300 line-clamp-2">
+<span class="text-primary font-medium">AI Summary:</span> Correlated with recent deployment <code class="bg-black/30 px-1 rounded text-xs text-slate-200">v2.4.1</code> to payment-gateway service. High probability of cascading failure affecting checkout flow.
+                                    </p>
+</div>
+<div class="text-right shrink-0 ml-4">
+<span class="text-xs text-slate-400 block">Time Detected</span>
+<span class="text-sm text-white font-mono">2m ago</span>
+</div>
+</div>
+<!-- Meta / Blast Radius -->
+<div class="flex items-center gap-6 mt-3 text-sm text-slate-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+<span>Impacted Services: <span class="text-white">Payments, Auth, Cart</span></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-orange-400">waves</span>
+<span>Blast Radius: <span class="text-orange-400 font-medium">High</span></span>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<div class="flex -space-x-2">
+<img alt="Engineer" class="w-6 h-6 rounded-full border border-background-dark" data-alt="On-call engineer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1zXqKsa-8psTa5WZgMr1PGc0TWyCwkW_mE0CmIF_n5PjJT2HxnorOFiv9o7FmBTNOhgUsu2SyBbblD_HW1zpoqAe4dpWazx1rGOyexduPCiS1MKTTGQ7CWStL3SKr_YWOCz1HnDLN1jaut3ra2qlhim9fftsptAf2xMr5g_UBFCPXN34Wl5mVVstF84VjXCdYD-EVcOuMLB7DDQfz3PTYpm_qYyziKZZ-dyUykz0ETcgtcIVsbsCV-_gGzt9teDyNer220ti_3Uas"/>
+<img alt="Engineer" class="w-6 h-6 rounded-full border border-background-dark" data-alt="On-call engineer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT15ktX8m3pp06FQvPZ-wwCLQntXAMevCjuepcFOnvO5AXyQ74B5bLeQgeuXIGT3LmgwAvEqRuTGLHcU_LdyNKtZMYWrSv3gcrbODTwp8OoghS63T3IgVkXFF_3jq9cU-t-PnCxWrcP-3oe4JH1aFeBZsB8AazpaP8Sb75xO6Ep5-AGcv5HkqEOSEwnDFPXWPGHtk6HxcUnv7BEIMQjv-hTZ5mPPv_5XGRerHANGARTm9xFX4G_gtibqDb5F9VdxDXjz35ylnSwwCA"/>
+</div>
+<span class="text-xs">2 on it</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col justify-center gap-2 pl-4 border-l border-border-dark">
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors" title="Acknowledge">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-primary/10 transition-colors" title="Open in BigPanda">
+<span class="material-symbols-outlined">open_in_new</span>
+</button>
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors" title="More Actions">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Severity Bar Gradient Overlay -->
+<div class="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-red-500 to-transparent opacity-50"></div>
+</div>
+<!-- Incident Card 2 -->
+<div class="group relative bg-surface-highlight border-l-4 border-l-orange-500 rounded-r-lg p-4 hover:bg-[#2a3f55] transition-all cursor-pointer">
+<div class="flex gap-4">
+<div class="flex flex-col items-center justify-start min-w-[60px] border-r border-border-dark pr-4">
+<span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Rank</span>
+<span class="text-2xl font-black text-white">#2</span>
+<div class="mt-2 flex flex-col items-center">
+<span class="text-[10px] text-slate-400 uppercase">Score</span>
+<div class="w-10 h-10 rounded-full border-2 border-orange-500 flex items-center justify-center bg-orange-500/10">
+<span class="text-xs font-bold text-orange-400">85</span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-white font-semibold text-lg truncate">API Rate Limit Threshold Breach</h3>
+<span class="bg-orange-500/20 text-orange-400 text-xs px-2 py-0.5 rounded border border-orange-500/30 font-medium">High</span>
+<span class="bg-surface-dark text-slate-400 text-xs px-2 py-0.5 rounded border border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">cloud_queue</span> AWS CloudWatch
+                                        </span>
+</div>
+<p class="text-sm text-slate-300 line-clamp-2">
+<span class="text-primary font-medium">AI Summary:</span> Unusual traffic spike from external partner IP range. Potential DDoS or misconfigured client retry logic.
+                                    </p>
+</div>
+<div class="text-right shrink-0 ml-4">
+<span class="text-xs text-slate-400 block">Time Detected</span>
+<span class="text-sm text-white font-mono">14m ago</span>
+</div>
+</div>
+<div class="flex items-center gap-6 mt-3 text-sm text-slate-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+<span>Impacted Services: <span class="text-white">API Gateway</span></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-yellow-400">waves</span>
+<span>Blast Radius: <span class="text-yellow-400 font-medium">Medium</span></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col justify-center gap-2 pl-4 border-l border-border-dark">
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">open_in_new</span>
+</button>
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Incident Card 3 -->
+<div class="group relative bg-surface-highlight border-l-4 border-l-yellow-500 rounded-r-lg p-4 hover:bg-[#2a3f55] transition-all cursor-pointer">
+<div class="flex gap-4">
+<div class="flex flex-col items-center justify-start min-w-[60px] border-r border-border-dark pr-4">
+<span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Rank</span>
+<span class="text-2xl font-black text-white">#3</span>
+<div class="mt-2 flex flex-col items-center">
+<span class="text-[10px] text-slate-400 uppercase">Score</span>
+<div class="w-10 h-10 rounded-full border-2 border-yellow-500 flex items-center justify-center bg-yellow-500/10">
+<span class="text-xs font-bold text-yellow-400">62</span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-white font-semibold text-lg truncate">Memory Leak Warning - Image Processor</h3>
+<span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-0.5 rounded border border-yellow-500/30 font-medium">Warning</span>
+<span class="bg-surface-dark text-slate-400 text-xs px-2 py-0.5 rounded border border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">monitoring</span> Datadog
+                                        </span>
+</div>
+<p class="text-sm text-slate-300 line-clamp-2">
+<span class="text-primary font-medium">AI Summary:</span> Gradual memory consumption increase observed over last 4 hours on 3 pods. Not yet affecting customer traffic.
+                                    </p>
+</div>
+<div class="text-right shrink-0 ml-4">
+<span class="text-xs text-slate-400 block">Time Detected</span>
+<span class="text-sm text-white font-mono">45m ago</span>
+</div>
+</div>
+<div class="flex items-center gap-6 mt-3 text-sm text-slate-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+<span>Impacted Services: <span class="text-white">Image-Proc</span></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-green-400">waves</span>
+<span>Blast Radius: <span class="text-green-400 font-medium">Low</span></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col justify-center gap-2 pl-4 border-l border-border-dark">
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+<button class="text-slate-400 hover:text-primary p-1 rounded hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">open_in_new</span>
+</button>
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Incident Card 4 (Acknowledged) -->
+<div class="group relative bg-surface-dark border border-border-dark border-l-4 border-l-slate-500 rounded-r-lg p-4 opacity-75 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex gap-4">
+<div class="flex flex-col items-center justify-start min-w-[60px] border-r border-border-dark pr-4">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-wider">Rank</span>
+<span class="text-2xl font-black text-slate-400">#4</span>
+<div class="mt-2 flex flex-col items-center">
+<span class="text-[10px] text-slate-500 uppercase">Score</span>
+<div class="w-10 h-10 rounded-full border-2 border-slate-600 flex items-center justify-center bg-slate-800">
+<span class="text-xs font-bold text-slate-400">45</span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-slate-300 font-semibold text-lg truncate">Non-Prod Jenkins Build Failure</h3>
+<span class="bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded font-medium">Acknowledged</span>
+</div>
+<p class="text-sm text-slate-400 line-clamp-2">
+                                        Build #4922 failed due to timeout. Retrying automatically. No production impact.
+                                    </p>
+</div>
+<div class="text-right shrink-0 ml-4">
+<span class="text-xs text-slate-500 block">Time Detected</span>
+<span class="text-sm text-slate-400 font-mono">2h ago</span>
+</div>
+</div>
+<div class="flex items-center gap-6 mt-3 text-sm text-slate-500">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+<span>Impacted Services: <span class="text-slate-400">CI/CD</span></span>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<div class="flex -space-x-2">
+<img alt="Engineer" class="w-6 h-6 rounded-full border border-background-dark grayscale" data-alt="On-call engineer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAir2lhWSY1pZmwLx3hOr2bdpJX_P8Cw4wjPkoUH4xLEfIZHUmLwc8SZKmhCOnKQPnoZNvbx8vbob4ue-6Yd55kef0MVYwJbkejvpoVZai9XdQyyMPEUp5LdU8sRK9QHj9qwoVIItbUzdpcGPptEr_Wxep9UjDVs52mFs1GnXvELlXWVXRsGG2BOTwb7uJs-oo-G4hM9xMNUSA7HHL7giQ6GT-us-3496o7v3zPUInp1950BE7vC6MZXN_0GuBCNulgjI_Id8lyKMvp"/>
+</div>
+<span class="text-xs">Assigned to Mike</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Panel: Queue Insights (AI) -->
+<aside class="w-80 bg-surface-dark border-l border-border-dark flex flex-col shrink-0">
+<div class="p-5 border-b border-border-dark bg-gradient-to-b from-primary/10 to-transparent">
+<div class="flex items-center gap-2 text-white mb-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h2 class="font-bold text-lg">Queue Insights</h2>
+</div>
+<p class="text-sm text-slate-400">AI analysis of the current queue state and recommended actions.</p>
+</div>
+<div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar">
+<!-- Recommendation 1 -->
+<div class="bg-surface-highlight border border-border-dark rounded-xl p-4 shadow-sm">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-red-500/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Urgent</span>
+<span class="text-xs text-slate-400">Root Cause Analysis</span>
+</div>
+<p class="text-sm text-white mb-3 font-medium">
+                        High correlation detected between Incident #1 (DB Latency) and #2 (API Limits).
+                    </p>
+<p class="text-xs text-slate-400 leading-relaxed mb-3">
+                        The DB latency seems to be causing API timeouts, triggering the retry storms.
+                    </p>
+<button class="w-full py-2 bg-primary hover:bg-primary-dark text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">merge</span>
+                        Merge Incidents
+                    </button>
+</div>
+<!-- Recommendation 2 -->
+<div class="bg-surface-highlight border border-border-dark rounded-xl p-4 shadow-sm">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-purple-500/20 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Pattern</span>
+<span class="text-xs text-slate-400">Historical Data</span>
+</div>
+<p class="text-sm text-white mb-3 font-medium">
+                        Recurring issue with Image Processor.
+                    </p>
+<p class="text-xs text-slate-400 leading-relaxed mb-3">
+                        This service has had 3 memory leaks in the last week. Consider creating a tech debt ticket.
+                    </p>
+<button class="w-full py-2 bg-surface-dark hover:bg-background-dark border border-border-dark text-slate-300 hover:text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add_task</span>
+                        Create Jira Ticket
+                    </button>
+</div>
+<!-- Automation Suggestion -->
+<div class="relative overflow-hidden rounded-xl border border-primary/30 p-4">
+<div class="absolute inset-0 bg-primary/5"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span class="text-xs font-bold uppercase">Automation</span>
+</div>
+<p class="text-sm text-white mb-2">
+                            Auto-remediation available for Incident #2.
+                        </p>
+<p class="text-xs text-slate-400 mb-3">
+                            Playbook: <code class="text-slate-300">Block_IP_Range_WAF</code>
+</p>
+<div class="flex gap-2">
+<button class="flex-1 py-1.5 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30 text-xs font-medium rounded transition-colors">
+                                Run Playbook
+                            </button>
+<button class="py-1.5 px-3 bg-surface-dark hover:bg-background-dark text-slate-400 border border-border-dark rounded transition-colors">
+<span class="material-symbols-outlined text-[16px]">info</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom status -->
+<div class="p-4 border-t border-border-dark text-center">
+<p class="text-[10px] text-slate-500">AI Model Last Updated: 2 mins ago</p>
+</div>
+</aside>
+</div>
+</body></html>

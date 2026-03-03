@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unified Incident Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111a22", // Matches the provided component's dark bg
+                        surface: "#233648", // Matches the provided component's surface color
+                        "surface-highlight": "#324d67", // Matches borders/separators
+                        "text-main": "#ffffff",
+                        "text-muted": "#92adc9",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-text-main overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex-none flex items-center justify-between whitespace-nowrap border-b border-solid border-surface-highlight bg-background-dark px-6 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-white">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined text-2xl">hub</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight">Ops Command Center</h2>
+</div>
+<label class="flex flex-col min-w-40 h-9 max-w-64 hidden md:flex">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-surface">
+<div class="text-text-muted flex border-none items-center justify-center pl-3 pr-1 rounded-l-lg">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-text-muted px-2 rounded-l-none pl-1 text-sm font-normal leading-normal" placeholder="Search incidents, services..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-white text-sm font-medium hover:text-primary transition-colors border-b-2 border-primary pb-0.5" href="#">Incidents</a>
+<a class="text-text-muted hover:text-white text-sm font-medium transition-colors" href="#">Services</a>
+<a class="text-text-muted hover:text-white text-sm font-medium transition-colors" href="#">On-Call</a>
+<a class="text-text-muted hover:text-white text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex gap-2 items-center border-l border-surface-highlight pl-6">
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-surface hover:bg-surface-highlight text-white transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-surface hover:bg-surface-highlight text-white transition-colors">
+<span class="material-symbols-outlined text-xl">help</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-9 ml-2 border border-surface-highlight cursor-pointer" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDFtvVD0P5GIYpiT5hdvO6cHoLLeMEKJgFyOsAXTmjSAwL2-9v0o86a949lRvi7b1FW_fGM_qBKyIRzQuUhGzb9Fo87YPmGkLT6mp8yDuCjaX9jjI_ZHCbnv-4QcBJUhcVunhAw_3gU3sGyAFa37JQADbRNP0Ct9YVfdyPZ6ji69WTBRBVWEMDfdVgexthVyaDCCxqtH2zOdP0wgmD93V0SB6Np-06QLUj-KHKwgcO99pkB0iIlvQQ2d8BlSv7MyVCPG_L1cwpu3bkU");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex overflow-hidden w-full relative">
+<!-- Left Column: Incident Summary & Details -->
+<aside class="w-80 flex-none flex flex-col border-r border-surface-highlight bg-background-dark overflow-y-auto">
+<div class="p-5 border-b border-surface-highlight bg-surface/30">
+<div class="flex items-start gap-2 mb-3">
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-500 border border-red-500/30">P1 Critical</span>
+<span class="px-2 py-0.5 rounded text-xs font-medium bg-surface text-text-muted border border-surface-highlight">INC-2940</span>
+</div>
+<h1 class="text-xl font-bold text-white leading-snug mb-2">Checkout API Failure</h1>
+<p class="text-sm text-text-muted">Started 15 mins ago</p>
+</div>
+<div class="p-5 space-y-6">
+<!-- Action Buttons -->
+<div class="flex gap-2">
+<button class="flex-1 bg-primary hover:bg-blue-600 text-white text-sm font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">edit</span>
+                        Manage
+                    </button>
+<button class="flex-1 bg-surface hover:bg-surface-highlight text-white text-sm font-medium py-2 rounded-lg transition-colors border border-surface-highlight flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">share</span>
+                        Share
+                    </button>
+</div>
+<!-- Key Fields -->
+<div class="space-y-4">
+<div class="group">
+<label class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1 block">Impacted Service</label>
+<div class="flex items-center gap-2 text-sm text-white bg-surface p-2 rounded border border-surface-highlight/50">
+<span class="material-symbols-outlined text-primary text-lg">api</span>
+                            Checkout-API
+                        </div>
+</div>
+<div class="group">
+<label class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1 block">Assignee</label>
+<div class="flex items-center gap-2 text-sm text-white bg-surface p-2 rounded border border-surface-highlight/50">
+<div class="size-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold border border-purple-500/30">SJ</div>
+                            Sarah Jenkins
+                            <span class="ml-auto text-xs text-text-muted bg-background-dark px-1.5 py-0.5 rounded">SRE</span>
+</div>
+</div>
+<div class="group">
+<label class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1 block">Commander</label>
+<div class="flex items-center gap-2 text-sm text-white bg-surface p-2 rounded border border-surface-highlight/50">
+<div class="size-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold border border-emerald-500/30">MK</div>
+                            Mike K.
+                        </div>
+</div>
+</div>
+<div class="border-t border-surface-highlight pt-4">
+<label class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block">SLA Timer</label>
+<div class="relative pt-1">
+<div class="flex mb-2 items-center justify-between text-xs">
+<span class="text-red-400 font-semibold">Time to Ack: Breached</span>
+<span class="text-text-muted">Target: 15m</span>
+</div>
+<div class="overflow-hidden h-2 mb-2 text-xs flex rounded bg-surface-highlight">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500" style="width: 100%"></div>
+</div>
+<div class="flex mb-2 items-center justify-between text-xs">
+<span class="text-white font-semibold">Time to Resolve</span>
+<span class="text-text-muted">Remaining: 3h 45m</span>
+</div>
+<div class="overflow-hidden h-2 mb-2 text-xs flex rounded bg-surface-highlight">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary" style="width: 15%"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center Column: Evidence & Metrics -->
+<section class="flex-1 flex flex-col min-w-0 bg-background-dark/50 overflow-hidden">
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Metrics Charts Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Chart 1: Latency -->
+<div class="bg-surface/50 rounded-xl border border-surface-highlight p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-400 text-lg">monitoring</span>
+                                API Latency (p99)
+                            </h3>
+<span class="text-xs text-text-muted bg-surface px-2 py-1 rounded">Last 1h</span>
+</div>
+<div class="h-40 w-full relative bg-gradient-to-t from-surface to-transparent rounded-lg border border-dashed border-surface-highlight flex items-end justify-between px-2 pb-2 gap-1 overflow-hidden">
+<!-- Faux Chart Bars -->
+<div class="w-full h-full absolute inset-0 flex items-end justify-around px-2 pb-0 gap-1 opacity-80">
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[20%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[25%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[22%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[30%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[45%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[40%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[35%] transition-all"></div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[48%] transition-all"></div>
+<div class="w-full bg-red-500/60 hover:bg-red-500/80 rounded-t-sm h-[90%] transition-all relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">2400ms</div>
+</div>
+<div class="w-full bg-red-500/60 hover:bg-red-500/80 rounded-t-sm h-[95%] transition-all"></div>
+<div class="w-full bg-red-500/60 hover:bg-red-500/80 rounded-t-sm h-[88%] transition-all"></div>
+<div class="w-full bg-red-500/60 hover:bg-red-500/80 rounded-t-sm h-[92%] transition-all"></div>
+</div>
+</div>
+</div>
+<!-- Chart 2: Error Rate -->
+<div class="bg-surface/50 rounded-xl border border-surface-highlight p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-red-400 text-lg">error</span>
+                                Error Rate (5xx)
+                            </h3>
+<span class="text-xs text-text-muted bg-surface px-2 py-1 rounded">Last 1h</span>
+</div>
+<div class="h-40 w-full relative bg-gradient-to-t from-surface to-transparent rounded-lg border border-dashed border-surface-highlight flex items-end justify-between px-2 pb-2 gap-1 overflow-hidden">
+<!-- Faux Line Chart -->
+<svg class="absolute inset-0 w-full h-full p-2" preserveaspectratio="none">
+<path d="M0 140 L30 140 L60 138 L90 140 L120 135 L150 138 L180 130 L210 50 L240 20 L270 30 L300 15 L330 25 L360 20 L400 10" fill="none" stroke="#ef4444" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<path class="opacity-20" d="M0 140 L30 140 L60 138 L90 140 L120 135 L150 138 L180 130 L210 50 L240 20 L270 30 L300 15 L330 25 L360 20 L400 10 L400 150 L0 150 Z" fill="url(#gradient)"></path>
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#ef4444;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#ef4444;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+</div>
+<!-- Database Health Cards -->
+<div>
+<h3 class="text-white font-bold text-lg mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400">database</span>
+                        Infrastructure Health
+                    </h3>
+<div class="grid grid-cols-3 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface rounded-lg border border-surface-highlight p-3 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-xs text-text-muted font-bold">MongoDB Primary</span>
+<span class="size-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+<div class="text-white text-lg font-mono">OK</div>
+<div class="text-[10px] text-text-muted mt-auto">CPU: 45%</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface rounded-lg border border-red-500/50 p-3 flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-1">
+<span class="material-symbols-outlined text-red-500 text-sm animate-pulse">warning</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-text-muted font-bold">Redis Cache</span>
+<span class="size-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
+</div>
+<div class="text-white text-lg font-mono">Degraded</div>
+<div class="text-[10px] text-text-muted mt-auto">Hit Rate: 12% (Low)</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface rounded-lg border border-surface-highlight p-3 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-xs text-text-muted font-bold">Kafka Stream</span>
+<span class="size-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+<div class="text-white text-lg font-mono">OK</div>
+<div class="text-[10px] text-text-muted mt-auto">Lag: 0ms</div>
+</div>
+</div>
+</div>
+<!-- Symptoms / Logs Table (Reusing component structure) -->
+<div>
+<h3 class="text-white font-bold text-lg mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-400">article</span>
+                        Symptoms &amp; Logs
+                    </h3>
+<div class="overflow-hidden rounded-lg border border-surface-highlight bg-surface/20">
+<table class="w-full text-left">
+<thead class="bg-surface border-b border-surface-highlight">
+<tr>
+<th class="px-4 py-3 text-xs font-bold text-text-muted uppercase tracking-wider w-24">Time</th>
+<th class="px-4 py-3 text-xs font-bold text-text-muted uppercase tracking-wider w-24">Level</th>
+<th class="px-4 py-3 text-xs font-bold text-text-muted uppercase tracking-wider">Message</th>
+<th class="px-4 py-3 text-xs font-bold text-text-muted uppercase tracking-wider w-32">Source</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-highlight font-mono text-sm">
+<tr class="hover:bg-surface/50 transition-colors">
+<td class="px-4 py-3 text-text-muted">10:42:12</td>
+<td class="px-4 py-3"><span class="inline-flex items-center rounded-md bg-red-400/10 px-2 py-1 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-400/20">CRITICAL</span></td>
+<td class="px-4 py-3 text-white">Uncaught Exception: Connection refused 127.0.0.1:6379</td>
+<td class="px-4 py-3 text-text-muted">payment-svc</td>
+</tr>
+<tr class="hover:bg-surface/50 transition-colors">
+<td class="px-4 py-3 text-text-muted">10:42:05</td>
+<td class="px-4 py-3"><span class="inline-flex items-center rounded-md bg-yellow-400/10 px-2 py-1 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-400/20">ERROR</span></td>
+<td class="px-4 py-3 text-white">Retry limit exceeded for Redis connection</td>
+<td class="px-4 py-3 text-text-muted">payment-svc</td>
+</tr>
+<tr class="hover:bg-surface/50 transition-colors">
+<td class="px-4 py-3 text-text-muted">10:42:01</td>
+<td class="px-4 py-3"><span class="inline-flex items-center rounded-md bg-yellow-400/10 px-2 py-1 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-400/20">ERROR</span></td>
+<td class="px-4 py-3 text-white">Timeout waiting for DB pool connection</td>
+<td class="px-4 py-3 text-text-muted">checkout-api</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Bottom: Timeline -->
+<div class="h-16 flex-none bg-surface border-t border-surface-highlight px-6 flex items-center gap-4 overflow-x-auto">
+<span class="text-xs font-bold text-text-muted uppercase tracking-wider mr-2 sticky left-0 bg-surface z-10">Timeline</span>
+<!-- Timeline Item 1 -->
+<div class="flex items-center gap-2 group cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<div class="size-2 rounded-full bg-text-muted"></div>
+<div class="flex flex-col">
+<span class="text-[10px] text-text-muted">10:30 AM</span>
+<span class="text-xs text-white whitespace-nowrap">Deploy v2.4.1</span>
+</div>
+</div>
+<div class="h-px w-8 bg-surface-highlight"></div>
+<!-- Timeline Item 2 -->
+<div class="flex items-center gap-2 group cursor-pointer">
+<div class="size-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+<div class="flex flex-col">
+<span class="text-[10px] text-red-400 font-bold">10:42 AM</span>
+<span class="text-xs text-white whitespace-nowrap font-medium">Alert Fired: High Latency</span>
+</div>
+</div>
+<div class="h-px w-8 bg-surface-highlight"></div>
+<!-- Timeline Item 3 -->
+<div class="flex items-center gap-2 group cursor-pointer">
+<div class="size-2 rounded-full bg-primary shadow-[0_0_8px_rgba(19,127,236,0.8)]"></div>
+<div class="flex flex-col">
+<span class="text-[10px] text-primary font-bold">10:45 AM</span>
+<span class="text-xs text-white whitespace-nowrap font-medium">Incident Created</span>
+</div>
+</div>
+<div class="h-px w-8 border-t border-dashed border-surface-highlight flex-1"></div>
+</div>
+</section>
+<!-- Right Column: AI Copilot -->
+<aside class="w-96 flex-none flex flex-col border-l border-surface-highlight bg-surface/10 relative">
+<!-- Header -->
+<div class="p-4 border-b border-surface-highlight flex justify-between items-center bg-background-dark">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</div>
+<span class="font-bold text-white">Ops Copilot</span>
+</div>
+<button class="text-text-muted hover:text-white">
+<span class="material-symbols-outlined">close_fullscreen</span>
+</button>
+</div>
+<!-- Chat Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- AI Message -->
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-indigo-500/20 flex-none flex items-center justify-center border border-indigo-500/30">
+<span class="material-symbols-outlined text-indigo-400 text-sm">smart_toy</span>
+</div>
+<div class="space-y-2">
+<div class="bg-surface rounded-2xl rounded-tl-none p-3 text-sm text-white border border-surface-highlight shadow-sm">
+<p class="mb-2">I've analyzed the logs and metrics. It appears <strong>Redis Cache</strong> is rejecting connections, causing the API latency spike.</p>
+<p class="mb-3 text-text-muted">Here are relevant citations:</p>
+<div class="flex flex-wrap gap-2">
+<button class="flex items-center gap-1 bg-background-dark hover:bg-black/40 px-2 py-1 rounded text-xs text-red-400 border border-red-500/30 transition-colors">
+<span class="material-symbols-outlined text-[10px]">error</span>
+                                    Log #294
+                                </button>
+<button class="flex items-center gap-1 bg-background-dark hover:bg-black/40 px-2 py-1 rounded text-xs text-orange-400 border border-orange-500/30 transition-colors">
+<span class="material-symbols-outlined text-[10px]">monitoring</span>
+                                    Metric: Redis Conn
+                                </button>
+</div>
+</div>
+<!-- Suggestion Cards -->
+<div class="bg-indigo-900/20 border border-indigo-500/30 rounded-xl p-3">
+<h4 class="text-xs font-bold text-indigo-300 uppercase mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+                                Suggested Mitigation
+                            </h4>
+<p class="text-xs text-white mb-3">Rollback the recent deployment or restart the Redis cluster.</p>
+<div class="flex gap-2">
+<button class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium py-1.5 px-2 rounded transition-colors text-center">
+                                    Restart Redis
+                                </button>
+<button class="flex-1 bg-surface hover:bg-surface-highlight text-white text-xs font-medium py-1.5 px-2 rounded border border-surface-highlight transition-colors text-center">
+                                    Run Diagnostic
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-3 flex-row-reverse">
+<div class="size-8 rounded-full bg-surface-highlight flex-none border border-white/10 bg-center bg-cover" data-alt="User Avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDN3AZpAbDM0fLWOI050MHMlL3j8ZQlTjc4zcwtxiyIHlhxfkXeifPO_HcvLr4Q4lYbs5OlToqBQh-ywuE8KJW1HkA4F2DApA0lygyngadhLLu94sR3Lm4P7nn5E_pmJNicwyEP3xhuwk5MHROOd8nlkMMdtxO56wu9t_578O3ZO_FJq779Lm8197J5D0WCNCervpOipa7B4jGGIbWshQ-r_XfQvIe_dKMq7-ovSxl7AHPDxV0XWsapYNHOVTmc1RRgt9YU_d98Y4VV')"></div>
+<div class="bg-primary text-white rounded-2xl rounded-tr-none p-3 text-sm shadow-sm max-w-[80%]">
+                        Check if there were any config changes to Redis recently.
+                    </div>
+</div>
+<!-- AI Typing Indicator -->
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-indigo-500/20 flex-none flex items-center justify-center border border-indigo-500/30">
+<span class="material-symbols-outlined text-indigo-400 text-sm">smart_toy</span>
+</div>
+<div class="bg-surface rounded-2xl rounded-tl-none p-3 text-sm text-text-muted border border-surface-highlight w-16 flex items-center justify-center gap-1">
+<span class="size-1.5 bg-text-muted rounded-full animate-bounce"></span>
+<span class="size-1.5 bg-text-muted rounded-full animate-bounce delay-75"></span>
+<span class="size-1.5 bg-text-muted rounded-full animate-bounce delay-150"></span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-background-dark border-t border-surface-highlight">
+<div class="relative">
+<input class="w-full bg-surface border border-surface-highlight text-white text-sm rounded-lg pl-3 pr-10 py-2.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-text-muted/70" placeholder="Ask Copilot or run command..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex gap-2">
+<button class="text-xs text-text-muted hover:text-white flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                            Attach
+                        </button>
+</div>
+<span class="text-[10px] text-text-muted">Press ⌘+K to focus</span>
+</div>
+</div>
+</aside>
+</main>
+</body></html>

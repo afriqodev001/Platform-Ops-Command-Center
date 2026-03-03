@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Platform Integrations &amp; RBAC Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111a22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #324d67; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #476887; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased overflow-hidden h-screen flex">
+<!-- Sidebar -->
+<aside class="w-64 bg-[#111a22] border-r border-[#233648] flex flex-col justify-between h-full shrink-0">
+<div class="flex flex-col gap-6 p-4">
+<!-- User Profile / Branding -->
+<div class="flex gap-3 items-center pb-4 border-b border-[#233648]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-[#233648]" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4e8keHDk18QhX_TeI_iOcmWq9i9hxWLRLBiscMxCDc080M5Xkv5L9k4cxecUi3aLmdsURsrAI6oGuOl52W-_n-t8l7Q7LYVpW2Q5tON6eKWCR8WEFw_7I4ngT2voTsPEu5k36thTHc7ZcuVdVp2n-YyPkST1dnXZ4KGgU7O150qXshJU-4vh_v6u8BobeGsRCBMFUy6HPQUHME7tP4hStuSj6zjcMUavLDdes_gzmJ6WD1gP7MF0__TFBbNwR98IIDARAyWErpJ8f");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-semibold leading-tight">Platform Ops</h1>
+<p class="text-[#92adc9] text-xs font-normal leading-normal">Admin Console</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92adc9] hover:bg-[#1a2632] hover:text-white rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92adc9] hover:bg-[#1a2632] hover:text-white rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">error</span>
+<span class="text-sm font-medium">Incidents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white bg-primary/20 rounded-lg transition-colors group border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined text-xl text-primary">shield</span>
+<span class="text-sm font-medium">RBAC</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92adc9] hover:bg-[#1a2632] hover:text-white rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">hub</span>
+<span class="text-sm font-medium">Correlation Rules</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#92adc9] hover:bg-[#1a2632] hover:text-white rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">memory</span>
+<span class="text-sm font-medium">AI Policies</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="p-4 border-t border-[#233648]">
+<a class="flex items-center gap-3 px-3 py-2 text-[#92adc9] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="px-8 py-6 border-b border-[#233648] bg-[#101922] shrink-0 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<h2 class="text-2xl font-bold text-white tracking-tight">Settings &amp; Integrations</h2>
+<p class="text-[#92adc9] text-sm">Manage external tool connections and configure role-based access permissions.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#233648] hover:bg-[#2d445a] rounded-lg transition-colors border border-[#324d67]">
+<span class="material-symbols-outlined text-lg">history</span>
+                    Audit Log
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-blue-600 rounded-lg transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">add</span>
+                    New Integration
+                </button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="max-w-[1400px] mx-auto flex flex-col gap-10">
+<!-- Section 1: Active Integrations -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-semibold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">link</span>
+                            Active Integrations
+                        </h3>
+<a class="text-sm text-primary hover:text-blue-400 font-medium" href="#">View All Integrations</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="flex flex-col gap-3 p-5 rounded-xl border border-[#324d67] bg-[#16212c] hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="bg-white p-2 rounded-lg">
+<img alt="ServiceNow Logo" class="size-6" data-alt="ServiceNow logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvdRmpewUO3o8n9TF1NvI4yC13bplj4pRLtjoS6MUOt7HufNkWMroxdCQz0b4KOTY7IVmfDiB_UBtmd9apJmQRAKig_foS-e69gF8vK5aTyxZ-n82eAv_oWr4LcfazHg0vaRR4ywPMRtkwLzF-seawbbnUZdh3rEHZFaaVz20wht8DT_heV4Eo3MDM8qbl35mF1xWSqTaWzNrQiiyWEH5_PI09kaQTFP0BUl_E6V8xo-VFEzCNGWJmFS-38fJYdPo0e6aFWx_-OR1i"/>
+</div>
+<span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-semibold rounded-full border border-green-500/20">Connected</span>
+</div>
+<div>
+<h4 class="text-white font-semibold text-lg">ServiceNow</h4>
+<p class="text-[#92adc9] text-sm">ITSM &amp; Ticketing</p>
+</div>
+<div class="h-px w-full bg-[#233648] my-1"></div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">API Health</span>
+<span class="text-green-400 font-medium">99.9%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">Last Sync</span>
+<span class="text-slate-300">Just now</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col gap-3 p-5 rounded-xl border border-[#324d67] bg-[#16212c] hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="bg-white p-2 rounded-lg">
+<img alt="Splunk Logo" class="size-6" data-alt="Splunk logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqPyAqlLOYLsPkf3cwA4Qz0Keylpto2HcEQGbsH2Ii6Gy44Jw1NlMC4MYgpa4WLwWp9W1DLDgd01RwYCy7H4U20AEUvfzLLKtvjnW02iy-g9g2aNRWMBaBmLEXvToitpzxDQSTT7-fj92FUqcSKQ3FRTJ6ruxwXc99oMdIRge1icb3F0ku41--kbH0BFHj_lvBTC_SwXDIqZY0DePzaPvMvUTNp4NJpGvJ5ccTGsSDpq2PUt-He4NnKl_FYix6w7HjgVUOIpe15AuA"/>
+</div>
+<span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-semibold rounded-full border border-green-500/20">Connected</span>
+</div>
+<div>
+<h4 class="text-white font-semibold text-lg">Splunk</h4>
+<p class="text-[#92adc9] text-sm">Log Management</p>
+</div>
+<div class="h-px w-full bg-[#233648] my-1"></div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">API Health</span>
+<span class="text-green-400 font-medium">100%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">Last Sync</span>
+<span class="text-slate-300">5m ago</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col gap-3 p-5 rounded-xl border border-[#324d67] bg-[#16212c] hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="bg-white p-2 rounded-lg">
+<img alt="MongoDB Logo" class="size-6" data-alt="MongoDB logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNk6hu8aitXmetMJB-0bpGvn_v9NPhvAvDj8tdr9gDaFudJq_TI1VOy0hnblLequP9qtg2KuISUr6Q7I3vZSq7AZ0UPktj0D8nyU1MJdQdkEsw-K_pme1ck5pUHpIb5RCzknabEl1KVxGhoCC7BHprM0TgNQ4QiEuefMeqNhmVpDzP-mmsRYcBTTwY6hcRDkU87Y63YZ1dGWQ18cfmRgYvJWdPcBKqifBKfh5E9DtIRDMuv2xsROBryLqntqhjsATxcRZiJaxkoYvr"/>
+</div>
+<span class="px-2 py-1 bg-yellow-500/10 text-yellow-400 text-xs font-semibold rounded-full border border-yellow-500/20">Degraded</span>
+</div>
+<div>
+<h4 class="text-white font-semibold text-lg">MongoDB</h4>
+<p class="text-[#92adc9] text-sm">Database Metrics</p>
+</div>
+<div class="h-px w-full bg-[#233648] my-1"></div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">API Health</span>
+<span class="text-yellow-400 font-medium">92%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">Last Sync</span>
+<span class="text-slate-300">12m ago</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="flex flex-col gap-3 p-5 rounded-xl border border-[#324d67] bg-[#16212c] hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start">
+<div class="bg-white p-2 rounded-lg">
+<img alt="BigPanda Logo" class="size-6" data-alt="BigPanda logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3N6qAzPJbqTwUjapUog07jDR33tTMolDnY6uPEcMS8sGLZE5NoyYARqr0TZg1b9oZZqVrZn3NVvPiZtCv4Le6aUGpoy7b3zhTOF64BqALTulvhC7AQbynQZEzOc0znWQlttD5fzP8QDnOVV5UTiQfL6aUoUUK_8mnMBgkNLtXp9AUgaL8aIQyWistMp-up50w7sTelF6i38ZXaYzv3WLzgv_8SDU6Lk3l8uThfXyyAOCPZr_7q4bvkItund9onG8OkZPM3L8WhFKB"/>
+</div>
+<span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-xs font-semibold rounded-full border border-blue-500/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px] animate-spin">sync</span> Syncing
+                                </span>
+</div>
+<div>
+<h4 class="text-white font-semibold text-lg">BigPanda</h4>
+<p class="text-[#92adc9] text-sm">Event Correlation</p>
+</div>
+<div class="h-px w-full bg-[#233648] my-1"></div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">API Health</span>
+<span class="text-green-400 font-medium">98%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#92adc9]">Last Sync</span>
+<span class="text-slate-300">2m ago</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: RBAC -->
+<section class="flex flex-col gap-4 flex-1">
+<div class="flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-semibold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+                                Role-Based Access Control
+                            </h3>
+<p class="text-[#92adc9] text-sm">Manage team permissions and service ownership mapping.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#92adc9] text-lg">search</span>
+<input class="bg-[#16212c] border border-[#324d67] text-white text-sm rounded-lg pl-10 pr-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none w-64 placeholder-[#5c728a]" placeholder="Search teams..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#92adc9] bg-[#16212c] hover:text-white border border-[#324d67] rounded-lg">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                                Filter
+                            </button>
+</div>
+</div>
+<!-- RBAC Table -->
+<div class="overflow-x-auto rounded-xl border border-[#324d67] bg-[#16212c]">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#1a2632] border-b border-[#324d67]">
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[25%]">Team Name</th>
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[25%]">Mapped Services</th>
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[20%]">Role / Policy</th>
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[15%]">Members</th>
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[15%]">Last Modified</th>
+<th class="p-4 text-xs font-semibold text-[#92adc9] uppercase tracking-wider w-[5%]"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#233648]">
+<!-- Row 1 -->
+<tr class="group hover:bg-[#1e2d3d] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">group</span>
+</div>
+<div>
+<p class="text-white text-sm font-medium">SRE Core</p>
+<p class="text-[#92adc9] text-xs">Infrastructure</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">cluster-ops-v1</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">monitoring-agent</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">+4 more</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-purple-500/10 text-purple-400 text-xs font-medium rounded-full border border-purple-500/20">Full Admin</span>
+</td>
+<td class="p-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3HbPP5xEhxDNi_ci38L-hmoqkYdGwkY_SWnBS82p3iQBwnFTJpFAxCT3nLar4n0T7ZgUKWOMpK4rArCZUGeDP2UiNTxpcp7wA0O6g4_J_y9fHy5LA1MQsXR_f1pCFm9RnvnXOl9gUhB3Xpxvzy9j6cUTDAo0KWwC58CrcJWyI-Hu4ypfyiur5BxdCjS3xM61zgemgX_D1YM0R3pGBnSOvIBkVsHfCYKUCwBr0TVuiOIa23TfvvrDAgJjRg5poGqqbk7RYuweex_nM")'></div>
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZvTKMvY4MjF8MuzHDhpMkj9vuenaobY39kNepzfPjGDcfoqlm_ibM16NAWh0YVOCDekBRKfM-bDNO6LaQRZBBAInpud8NQ3rLL1SxR4JgedDwvV6LvLXoVkki86LrhdD33ijMSnU9s8veXKuTbukRvBqIjrgufGJb2ntU_S0avg-hh9mqHwq7LyfsIbodSfK7EgOh4FtZFi9kVct5NrQV_o9T8LV0xfP0VPhu_ehTxTfX23X5O3YXLoqEWB988YPLhemwif94TUC8")'></div>
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#233648] flex items-center justify-center text-xs text-white font-medium">+8</div>
+</div>
+</td>
+<td class="p-4 text-sm text-[#92adc9]">2h ago</td>
+<td class="p-4 text-right">
+<button class="text-[#92adc9] hover:text-white p-1 rounded hover:bg-[#233648]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-[#1e2d3d] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="bg-orange-500/20 text-orange-400 p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">payments</span>
+</div>
+<div>
+<p class="text-white text-sm font-medium">Payments Team</p>
+<p class="text-[#92adc9] text-xs">Product Engineering</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">checkout-api</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">payment-gateway</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full border border-blue-500/20">Editor</span>
+</td>
+<td class="p-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDqIpHbipO9b6whVznDkOPH-StmqhTCh_viUTQXYlSp1CNnvtbGpmsyYDHDqLVcX8sYV9JCd5XqJNUtY65WV_trRQRJZHtKeDRhfv4-Dy-vi_cZGqaSb8bZhJE9NME1i6JTZ0sgv06WjOuN4WMirFUG6uZDajZtxburn_1JuTDS5-YHf_EVbhgesWKyOsmhbpG8nopKDLxhjZBGnaqDgBxxK-OU4j3Qj9BHsj7l8221BwSqrfhTLsId0eNf7qgOJ1P3zRTQNgCaONrT")'></div>
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLbx0SNLU0E5X4cINTT-sYygukqNDHTRtHUyrNPTWo8EBJEJleaIWH4HyHoHH37xd_SEDwMtxRs8ZdLKzbzsb3eevkc0sP3GB6KNMem5C2gU5Gbz7mYkKYgQmUaFjm0zlS0PwBgw0HeqQ3G4apqv_lTwd9hcLgYUsfjfMFa7E2rxpVyMsEh4BB7qF_my9h4SOB6sjfwwlKp0ZYgo58soUeSd0OUuXvbs0JltP-bCbLxd26Wwz_jo9caBCkSikAZPRF2OjSZkKN_Icf")'></div>
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCOn2h6j_grp9KhSvBBHf60dG818dfUd5tMXxNPySVfnz5Ll2PRdBJ6dHGArHIrhwIHu6KQlX5pSwMfBUDCdlIelB0KXoS0--wLcyQEWeI6WSdNH37Z7fW-iHwpxXO7Hp52vvO1I1ufKwxn9-Ce3hi0ebIUjMiIw1qwONHHbyPx9c9AiWxbUAjC2BlregsK9_LCuSF3Tkr2kKQKW_v-4-8eZ7fy5CXlABDd80OQQDCc1plftVYqECydsWQVEwdKso2W_Az4kPuq4Ox2")'></div>
+</div>
+</td>
+<td class="p-4 text-sm text-[#92adc9]">1d ago</td>
+<td class="p-4 text-right">
+<button class="text-[#92adc9] hover:text-white p-1 rounded hover:bg-[#233648]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-[#1e2d3d] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="bg-cyan-500/20 text-cyan-400 p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">analytics</span>
+</div>
+<div>
+<p class="text-white text-sm font-medium">Data Platform</p>
+<p class="text-[#92adc9] text-xs">Analytics</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">kafka-broker</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">spark-master</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">airflow-web</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-gray-500/20 text-gray-300 text-xs font-medium rounded-full border border-gray-500/30">Viewer</span>
+</td>
+<td class="p-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC9HkH28yytpMgSv9yAyUy9jJ7Xs18lEcJ-UzIXTmCdZOo6LmtCS-fxVCs-8m6pwPO5cEs_ctcWaIruzyHAttjc3sQkrYvLSiLC96VTxQ_o5y47gHTbLPs1qDcJDe7GV0DjC0aehyO19Kn6s8iP-GvBhf834an153exVo6nbLkqQnNP4p7qOXiJMF7EyM4VVJIeZW8xHA_pT9pfM-BW4Dc-gwYujoHaLFVHP4UceG6JfKv1uT1w4-xljBTiDB5qUfegY2w70Rf5rAX3")'></div>
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#233648] flex items-center justify-center text-xs text-white font-medium">+12</div>
+</div>
+</td>
+<td class="p-4 text-sm text-[#92adc9]">3d ago</td>
+<td class="p-4 text-right">
+<button class="text-[#92adc9] hover:text-white p-1 rounded hover:bg-[#233648]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-[#1e2d3d] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="bg-pink-500/20 text-pink-400 p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+</div>
+<div>
+<p class="text-white text-sm font-medium">Checkout Flow</p>
+<p class="text-[#92adc9] text-xs">Frontend</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">web-checkout</span>
+<span class="px-2 py-1 bg-[#233648] text-[#92adc9] text-xs rounded border border-[#324d67]">cart-service</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full border border-blue-500/20">Editor</span>
+</td>
+<td class="p-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-[#16212c] bg-[#324d67] bg-cover" data-alt="Team member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDrX4amUSeafy5ioicq8qj6p8IthNrBwfYeMT8sDJ-1Jx4k9eabIa25JTvN26q826WSjxkqF_wmg-r8AZngyYwylio91lYyACfgCxQpJaHSWRRMcYiiniYWOgjPf_sV9drXH-vIW3Wzd4meXUFbaEuoh7eOsA7c282wGtHZd0wop3tEC0pVcYXVSIPn3l6LEPvPm2-TsZibSWkBqp0BJEzWe8W4HdkTlJVpo-wnAN_QQDSHJhot-nAfWjRmR6lUmAoiWqnshQ8tToXs")'></div>
+</div>
+</td>
+<td class="p-4 text-sm text-[#92adc9]">1w ago</td>
+<td class="p-4 text-right">
+<button class="text-[#92adc9] hover:text-white p-1 rounded hover:bg-[#233648]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-4 py-3 border-t border-[#324d67] bg-[#1a2632]">
+<p class="text-xs text-[#92adc9]">Showing <span class="text-white font-medium">1-4</span> of <span class="text-white font-medium">12</span> teams</p>
+<div class="flex gap-2">
+<button class="p-1 rounded bg-[#233648] text-[#92adc9] hover:text-white hover:bg-[#324d67] disabled:opacity-50">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="p-1 rounded bg-[#233648] text-[#92adc9] hover:text-white hover:bg-[#324d67]">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

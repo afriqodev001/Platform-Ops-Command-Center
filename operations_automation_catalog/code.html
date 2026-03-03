@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Operations Automation Catalog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "primary-dark": "#0b63c1",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111a22", // Matches the request's dark mode base
+                        "surface-dark": "#192633", // Slightly lighter for cards/sidebar
+                        "surface-border": "#233648", // Borders
+                        "text-secondary": "#92adc9",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        "2xl": "1rem",
+                        full: "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-surface-border bg-background-dark px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">OpsCommand</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-secondary hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-text-secondary hover:text-white text-sm font-medium transition-colors" href="#">Incidents</a>
+<a class="text-white text-sm font-medium" href="#">Automation</a>
+<a class="text-text-secondary hover:text-white text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4">
+<div class="relative hidden sm:block">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="block w-full rounded-lg border-none bg-surface-dark py-2 pl-10 pr-4 text-sm text-white placeholder-text-secondary focus:ring-1 focus:ring-primary" placeholder="Search..." type="text"/>
+</div>
+<button class="relative rounded-full bg-surface-dark p-2 text-text-secondary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-red-500"></span>
+</button>
+<div class="size-9 rounded-full bg-surface-dark overflow-hidden border border-surface-border">
+<img alt="User Avatar" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDucmHgc34E9X_w8_EBbMlajKvk-Gs4ZI25TfOfsCoEDaEUyTjOzoNpr6_VCHu84adD0NSZGH8CdgGf8BnuUwIQyg_VfxDfseA4GlNFTG9Tx2GU2R0jrTRma3couJjSjsw2Lm8tS5W5yasHS-y2c_fAgZF_nOWghrxZQhgF-lqcdNEp259rX5Cy1See8Wnk6xQt3D7iEwTg1oFj-8aNlKw_bbvsfs-TpUEuSxvN6a5ud5sxPgMIA7LGvsLr7G1LyM5rVgxi9nU8xiyo"/>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col max-w-[1400px] mx-auto w-full p-6 gap-8">
+<!-- Header Section -->
+<section class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Automation Catalog</h1>
+<p class="text-text-secondary text-lg max-w-2xl">Execute and manage operational runbooks across your infrastructure. Securely automate repetitive tasks.</p>
+</div>
+<div class="w-full md:w-auto min-w-[320px]">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="block w-full rounded-xl border border-surface-border bg-surface-dark py-3 pl-10 pr-4 text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm" placeholder="Search actions (e.g. restart, scale)..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Categories / Filters -->
+<section class="flex flex-wrap gap-2 pb-2">
+<button class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-dark transition-colors">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+                All Systems
+            </button>
+<button class="inline-flex items-center gap-2 rounded-lg bg-surface-dark border border-surface-border px-4 py-2 text-sm font-medium text-text-secondary hover:text-white hover:border-text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">cloud</span>
+                Kubernetes
+            </button>
+<button class="inline-flex items-center gap-2 rounded-lg bg-surface-dark border border-surface-border px-4 py-2 text-sm font-medium text-text-secondary hover:text-white hover:border-text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">database</span>
+                Database
+            </button>
+<button class="inline-flex items-center gap-2 rounded-lg bg-surface-dark border border-surface-border px-4 py-2 text-sm font-medium text-text-secondary hover:text-white hover:border-text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">router</span>
+                Networking
+            </button>
+<button class="inline-flex items-center gap-2 rounded-lg bg-surface-dark border border-surface-border px-4 py-2 text-sm font-medium text-text-secondary hover:text-white hover:border-text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">build</span>
+                CI/CD
+            </button>
+<button class="inline-flex items-center gap-2 rounded-lg bg-surface-dark border border-surface-border px-4 py-2 text-sm font-medium text-text-secondary hover:text-white hover:border-text-secondary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                Filters
+            </button>
+</section>
+<!-- Automation Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1: Restart Service -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500 ring-1 ring-blue-500/20">
+<span class="material-symbols-outlined">restart_alt</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Restart Service</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+<span>Ansible</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-1 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">
+                        Approval Req.
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Gracefully restart a microservice instance. Drains connections before stopping.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">2h ago</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+<!-- Card 2: Scale K8s Deployment -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10 text-purple-500 ring-1 ring-purple-500/20">
+<span class="material-symbols-outlined">deployed_code</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Scale K8s Deployment</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-blue-400"></span>
+<span>Kubernetes</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-500 ring-1 ring-inset ring-green-500/20">
+                        Auto-Approved
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Adjust replica count for a specific deployment within a namespace.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">15m ago</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+<!-- Card 3: Flush Redis Cache -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10 text-red-500 ring-1 ring-red-500/20">
+<span class="material-symbols-outlined">delete_sweep</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Flush Redis Cache</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-red-500"></span>
+<span>Redis CLI</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-1 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">
+                        Approval Req.
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Clear all keys from the specified Redis database. Use with caution in production.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">5d ago</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+<!-- Card 4: Database Failover -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500 ring-1 ring-orange-500/20">
+<span class="material-symbols-outlined">dns</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Postgres Failover</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-indigo-500"></span>
+<span>Terraform</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-red-500/10 px-2 py-1 text-xs font-medium text-red-500 ring-1 ring-inset ring-red-500/20">
+                        Critical
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Initiate failover to the standby replica for the primary Postgres cluster.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">Never</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+<!-- Card 5: Rotate API Keys -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 ring-1 ring-teal-500/20">
+<span class="material-symbols-outlined">key</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Rotate API Keys</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-cyan-500"></span>
+<span>Vault</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-500 ring-1 ring-inset ring-green-500/20">
+                        Auto-Approved
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Generate new API keys for the selected service and revoke old ones.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">1d ago</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+<!-- Card 6: Rollback Release -->
+<div class="group relative flex flex-col rounded-xl border border-surface-border bg-surface-dark p-5 shadow-lg transition-all hover:border-primary/50 hover:shadow-primary/5">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-pink-500/10 text-pink-500 ring-1 ring-pink-500/20">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div>
+<h3 class="font-semibold text-white">Rollback Release</h3>
+<div class="flex items-center gap-1.5 text-xs text-text-secondary mt-0.5">
+<span class="size-1.5 rounded-full bg-orange-400"></span>
+<span>GitLab CI</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-1 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">
+                        Approval Req.
+                    </span>
+</div>
+<p class="text-sm text-text-secondary line-clamp-2 mb-6">
+                    Revert the production environment to the previous stable build artifact.
+                </p>
+<div class="mt-auto flex items-center justify-between border-t border-surface-border pt-4">
+<div class="text-xs text-text-secondary">
+                        Last run: <span class="text-white">3w ago</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                        Dry Run
+                    </button>
+</div>
+</div>
+</section>
+<!-- Audit Log Section -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold text-white">Recent Executions</h3>
+<a class="text-sm text-primary hover:text-primary-dark font-medium flex items-center gap-1" href="#">
+                    View Full Log
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="w-full overflow-hidden rounded-xl border border-surface-border bg-surface-dark shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-text-secondary">
+<thead class="bg-[#1e2d3b] text-xs uppercase text-text-secondary font-semibold">
+<tr>
+<th class="px-6 py-4" scope="col">Status</th>
+<th class="px-6 py-4" scope="col">Action Name</th>
+<th class="px-6 py-4" scope="col">User</th>
+<th class="px-6 py-4" scope="col">Integration</th>
+<th class="px-6 py-4" scope="col">Duration</th>
+<th class="px-6 py-4 text-right" scope="col">Time</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-border">
+<tr class="hover:bg-surface-border/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-500 ring-1 ring-inset ring-green-500/20">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                        Success
+                                    </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">Scale K8s Deployment</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="User avatar" class="size-6 rounded-full bg-surface-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB48N_U3EUzCM51LarDYdC-rCn99ZuX2lCyDVspnVcYX0zm6J4hXs4cmuveiA9kxtMNzkI8XI_txS7wL-zLw21hAtP_tj_BXsdvXZb2bNyzlbTh3gApHljhh4_PgQUYf10S7BWommLk5D0DdJl20yWNEybaRk89UczqWyEKrsoG5I7BLaoLKwynLDYpaF5o4luXbZFO9W9fghTPMEC6Mo0Ms3gWDfXYiw7VgYY5sWmJBNq4YlDVnhCS7RHHCxtfBW7PQym5mEW1wh0h"/>
+<span>Alex Chen</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Kubernetes</td>
+<td class="whitespace-nowrap px-6 py-4">45s</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">15m ago</td>
+</tr>
+<tr class="hover:bg-surface-border/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-500 ring-1 ring-inset ring-green-500/20">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                        Success
+                                    </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">Restart Service (Auth)</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="User avatar" class="size-6 rounded-full bg-surface-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk5zwmuDvd3pJmxhWcuj24Kk3NUtou-zeXuGYytM_B3ECSfvMLGFBaQ9llLJPkhtxSujvJnhurrTM8eNrFCN9_6-LYTuXeEzVchAoHUwLIpzoi84_eTqL0DddNM53BkDDOBVgN8EZKPYMn0CDleCFllEb15wLPT9BKeRDovPMbUQVknew1KAV2nTuMyRBoWKPRwxRqLjXfHU0onw2MczLO5Ks1WmJXaJogF2ngpx9-Y_rQ7MydBY--8lQYvmZ2q08Imi5Iv3prGtzz"/>
+<span>Sarah Jones</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Ansible</td>
+<td class="whitespace-nowrap px-6 py-4">2m 10s</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">2h ago</td>
+</tr>
+<tr class="hover:bg-surface-border/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-500 ring-1 ring-inset ring-red-500/20">
+<span class="size-1.5 rounded-full bg-red-500"></span>
+                                        Failed
+                                    </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">Flush Redis Cache</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="User avatar" class="size-6 rounded-full bg-surface-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANB9Nm6N5dAfZCnjLSXpE4npPrxtAMiaay7QNZgTr_n4UmJRCnQd-66N4bPq2fPfGEp84ic42N2GfHlSf-FiN1sRMpjNI0cPkY_mtbMQwoFrBEH4EBIqg2ylsg5uWJOo5WrC7ixsmQzGIoK6h2q5vemY3KRsqpyGahMGm-JqNr6wvUfE9I07LnxkP_3Cj4CE0QXVa6mNrGtLNakr1Wr-1-AzJopL0JbGTJV4BI4cn61ym_XRR0eX9aani3uPc9CdC3fyk0CwKjR6eM"/>
+<span>Mike Ross</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Redis CLI</td>
+<td class="whitespace-nowrap px-6 py-4">12s</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">5h ago</td>
+</tr>
+<tr class="hover:bg-surface-border/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">
+<span class="size-1.5 rounded-full bg-yellow-500"></span>
+                                        Running
+                                    </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-white">Backup Database (Weekly)</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-surface-border flex items-center justify-center text-[10px] font-bold text-white">S</div>
+<span>System</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">Terraform</td>
+<td class="whitespace-nowrap px-6 py-4">--</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">Just now</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+</body></html>

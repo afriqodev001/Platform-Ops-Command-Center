@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Platform UI Design System Guide</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#137fec",
+                "background-light": "#f6f7f8",
+                "background-dark": "#101922",
+                "surface-dark": "#1b2631",
+                "surface-light": "#ffffff",
+                "border-dark": "#2d3b4b",
+                "border-light": "#e2e8f0",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col overflow-x-hidden text-slate-900 dark:text-slate-100">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-border-dark bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-10 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined text-xl">grid_view</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Platform Ops Design System</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Foundations</a>
+<a class="text-primary text-sm font-medium leading-normal border-b-2 border-primary pb-0.5" href="#">Components</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Patterns</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Templates</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full ring-1 ring-slate-200 dark:ring-border-dark focus-within:ring-primary dark:focus-within:ring-primary transition-all">
+<div class="text-slate-400 dark:text-slate-500 flex bg-white dark:bg-surface-dark items-center justify-center pl-3 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-lg">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-surface-dark focus:border-none h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search components..." value=""/>
+</div>
+</label>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-white dark:ring-border-dark" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBr4vOPjx5X9TVXL4vlmMkNj3qE900adYlY1XZOc679RYz2JdVveP8_mFhZvoDLW9cBmiwzbiQVwmVknKZoHeQqI-x3hN-hJsG08FLl38Dj6hT-q_rilrLoNLUQEoMzZ70D_LiQ1moy2x7nbIyK4Ap1ffgK-lGmXJ8wJNlXAJqunoWRFY-UfJIbXX-mOguKBTWMVdNKs7oGsUNBncxKpE1CXr5sFI0cdroHcvdyNLot4e5aH_t_Y9Nt6hEOLdPpez1xu794_z_lpxVI");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full px-6 py-8 md:px-10 lg:px-40 max-w-[1600px] mx-auto">
+<div class="grid grid-cols-12 gap-8">
+<!-- Sidebar Navigation -->
+<div class="col-span-12 lg:col-span-3 hidden lg:block">
+<div class="sticky top-24">
+<h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">On this page</h3>
+<nav class="flex flex-col gap-1 border-l border-slate-200 dark:border-border-dark pl-4">
+<a class="text-sm font-medium text-slate-900 dark:text-white border-l-2 border-primary -ml-[17px] pl-4 py-1" href="#typography">Typography</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#colors">Color System</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#buttons">Buttons &amp; Actions</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#badges">Badges &amp; Status</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#cards">Containers &amp; Cards</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#tables">Data Display</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors py-1" href="#ai">AI Components</a>
+</nav>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="col-span-12 lg:col-span-9 flex flex-col gap-16">
+<!-- Hero Section -->
+<section>
+<h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">Component Library</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+                        A collection of reusable components for building the Platform Ops Command Center. These components are designed to be accessible, responsive, and consistent with our design language.
+                    </p>
+</section>
+<!-- Typography -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="typography">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">text_fields</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Typography</h2>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-border-dark overflow-hidden p-8 grid gap-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-baseline border-b border-slate-100 dark:border-border-dark pb-6">
+<span class="text-xs font-mono text-slate-400">Heading 1 / Inter Medium</span>
+<h1 class="col-span-2 text-4xl font-medium tracking-tight text-slate-900 dark:text-white">Platform Overview</h1>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-baseline border-b border-slate-100 dark:border-border-dark pb-6">
+<span class="text-xs font-mono text-slate-400">Heading 2 / Inter Medium</span>
+<h2 class="col-span-2 text-3xl font-medium tracking-tight text-slate-900 dark:text-white">Incident Response</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-baseline border-b border-slate-100 dark:border-border-dark pb-6">
+<span class="text-xs font-mono text-slate-400">Heading 3 / Inter SemiBold</span>
+<h3 class="col-span-2 text-xl font-semibold text-slate-900 dark:text-white">Service Health Metrics</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-baseline">
+<span class="text-xs font-mono text-slate-400">Body / Inter Regular</span>
+<p class="col-span-2 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                                System reliability engineering involves monitoring latency, traffic, errors, and saturation. Use these metrics to drive decisions and automate responses within the platform ops dashboard.
+                            </p>
+</div>
+</div>
+</section>
+<!-- Color Palette (Mini) -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="colors">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">palette</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Color System</h2>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="space-y-2">
+<div class="h-24 rounded-lg bg-primary shadow-lg shadow-blue-500/20 flex items-end p-3">
+<span class="text-white font-mono text-xs">Primary #137FEC</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-24 rounded-lg bg-surface-dark border border-border-dark flex items-end p-3">
+<span class="text-slate-400 font-mono text-xs">Surface #1B2631</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-24 rounded-lg bg-background-dark border border-border-dark flex items-end p-3">
+<span class="text-slate-400 font-mono text-xs">Bg Dark #101922</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-24 rounded-lg bg-red-500 shadow-lg shadow-red-500/20 flex items-end p-3">
+<span class="text-white font-mono text-xs">Critical #EF4444</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Buttons -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="buttons">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">smart_button</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Buttons &amp; Actions</h2>
+</div>
+<div class="p-8 rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark flex flex-wrap gap-8 items-center justify-start">
+<!-- Primary -->
+<div class="flex flex-col gap-4 items-center">
+<button class="bg-primary hover:bg-blue-600 text-white font-medium py-2 px-5 rounded-lg transition-all shadow-lg shadow-primary/30 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+                                Create Incident
+                            </button>
+<span class="text-xs font-mono text-slate-400">Primary</span>
+</div>
+<!-- Secondary/Outline -->
+<div class="flex flex-col gap-4 items-center">
+<button class="bg-transparent border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium py-2 px-5 rounded-lg transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+                                Filter Logs
+                            </button>
+<span class="text-xs font-mono text-slate-400">Secondary</span>
+</div>
+<!-- Ghost -->
+<div class="flex flex-col gap-4 items-center">
+<button class="bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary font-medium py-2 px-4 rounded-lg transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                                Configure
+                            </button>
+<span class="text-xs font-mono text-slate-400">Ghost</span>
+</div>
+<!-- Danger -->
+<div class="flex flex-col gap-4 items-center">
+<button class="bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 font-medium py-2 px-5 rounded-lg transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+                                Terminate Pod
+                            </button>
+<span class="text-xs font-mono text-slate-400">Danger</span>
+</div>
+</div>
+</section>
+<!-- Badges -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="badges">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">label</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Severity Badges</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<div class="p-6 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark flex flex-col items-center justify-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                CRITICAL
+                            </span>
+<span class="text-xs text-slate-500">System Down</span>
+</div>
+<div class="p-6 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark flex flex-col items-center justify-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                                HIGH
+                            </span>
+<span class="text-xs text-slate-500">Performance Degraded</span>
+</div>
+<div class="p-6 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark flex flex-col items-center justify-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                                WARNING
+                            </span>
+<span class="text-xs text-slate-500">High Latency</span>
+</div>
+<div class="p-6 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark flex flex-col items-center justify-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                HEALTHY
+                            </span>
+<span class="text-xs text-slate-500">Operational</span>
+</div>
+</div>
+</section>
+<!-- Cards -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="cards">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Card Containers</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Standard Card -->
+<div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-border-dark shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white">Cluster Usage</h3>
+<p class="text-sm text-slate-500">US-East-1 Region</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">more_horiz</span>
+</div>
+<div class="h-20 bg-slate-50 dark:bg-background-dark/50 rounded-lg flex items-center justify-center border border-dashed border-slate-200 dark:border-border-dark">
+<span class="text-xs text-slate-400">Chart Placeholder</span>
+</div>
+</div>
+<!-- Accent Card -->
+<div class="bg-white dark:bg-surface-dark p-6 rounded-xl border-l-4 border-l-primary border-y border-r border-slate-200 dark:border-border-dark shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">cloud_queue</span>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white">Deployment Status</h3>
+<p class="text-sm text-slate-500">production-api-v2</p>
+</div>
+</div>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden mt-2">
+<div class="bg-primary h-full rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between mt-2 text-xs">
+<span class="text-slate-500">Migrating Database...</span>
+<span class="text-slate-900 dark:text-white font-medium">75%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Data Display -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12" id="tables">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-blue-500/10 text-primary">
+<span class="material-symbols-outlined">table_chart</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Data Tables</h2>
+</div>
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-background-dark/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-border-dark">
+<tr>
+<th class="px-6 py-3 font-medium">Service Name</th>
+<th class="px-6 py-3 font-medium">Status</th>
+<th class="px-6 py-3 font-medium text-right">Uptime</th>
+<th class="px-6 py-3 font-medium text-right">Latency (24h)</th>
+<th class="px-6 py-3 font-medium"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-border-dark">
+<tr class="hover:bg-slate-50 dark:hover:bg-background-dark/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Auth-Service-Gateway</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            Healthy
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">99.99%</td>
+<td class="px-6 py-4 flex justify-end">
+<!-- Simple CSS Sparkline -->
+<div class="flex items-end gap-[2px] h-8 w-24 opacity-80">
+<div class="w-1 bg-primary rounded-t-sm h-[30%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[45%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[20%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[60%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[50%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[70%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[40%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[55%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[80%]"></div>
+<div class="w-1 bg-primary rounded-t-sm h-[60%]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-background-dark/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Payment-Processor-V4</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/10 text-orange-600 dark:text-orange-400">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                                            Degraded
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">98.50%</td>
+<td class="px-6 py-4 flex justify-end">
+<div class="flex items-end gap-[2px] h-8 w-24 opacity-80">
+<div class="w-1 bg-orange-500 rounded-t-sm h-[20%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[35%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[60%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[90%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[80%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[95%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[85%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[60%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[50%]"></div>
+<div class="w-1 bg-orange-500 rounded-t-sm h-[40%]"></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- AI Copilot -->
+<section class="border-t border-slate-200 dark:border-border-dark pt-12 mb-20" id="ai">
+<div class="flex items-center gap-3 mb-8">
+<span class="p-2 rounded bg-purple-500/10 text-purple-400">
+<span class="material-symbols-outlined">auto_awesome</span>
+</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">AI Copilot Components</h2>
+</div>
+<div class="bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-xl p-8 max-w-2xl">
+<!-- Bot Message -->
+<div class="flex gap-4 mb-6">
+<div class="size-10 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+<span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="bg-slate-100 dark:bg-background-dark rounded-2xl rounded-tl-none px-5 py-3.5 text-slate-800 dark:text-slate-200 text-sm leading-relaxed border border-slate-200 dark:border-border-dark">
+<p>I've detected a spike in 5xx errors on the <strong>checkout-service</strong> starting at 14:02 UTC. Would you like me to analyze the recent logs for root causes?</p>
+</div>
+<div class="flex gap-2 mt-1">
+<button class="text-xs bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark hover:border-primary dark:hover:border-primary text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">analytics</span>
+                                        Analyze Logs
+                                    </button>
+<button class="text-xs bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark hover:border-primary dark:hover:border-primary text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">history</span>
+                                        Show Timeline
+                                    </button>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 flex-row-reverse">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="User Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTK8Dd-CBXVvYFRv_-0HFeE4Wouyc8dqKigXeoLoHIZf72kZGQ3kLF3V-QIEM2xAEUxVZJW5lgLKKex8MBXsqwl23gYyzdqkwpeLGIwMHI2Ox64fnaJToPV9Y18rnRxDpGhpmEEdUtLnDadUvcjC-ebBhA6AuRAlRwCP9YRgLQXOa64ROLGycixR3Q7ewi4I_LusJJkVgiyWXQb-BEgQy7NVa1to0PLskt9B73m7fL8-jHF9Py-HBDZRD1vFCXsT0S3tZ4x80uXm_J"/>
+</div>
+<div class="bg-primary text-white rounded-2xl rounded-tr-none px-5 py-3.5 text-sm leading-relaxed shadow-md shadow-primary/20">
+<p>Yes, please analyze the logs and check for any recent deployments.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer class="border-t border-slate-200 dark:border-border-dark mt-auto bg-white dark:bg-surface-dark py-8 px-10">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 dark:text-slate-400 max-w-[1600px] mx-auto w-full">
+<div>
+                © 2023 Platform Ops Team. Internal Use Only.
+            </div>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+<a class="hover:text-primary transition-colors" href="#">Version 2.4.0</a>
+</div>
+</div>
+</footer>
+</body></html>

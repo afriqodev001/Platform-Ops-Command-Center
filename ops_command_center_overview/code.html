@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ops Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#137fec",
+                    "background-light": "#f6f7f8",
+                    "background-dark": "#111a22", 
+                    "surface-dark": "#1c2a38",
+                    "surface-highlight": "#233648",
+                    "text-secondary": "#92adc9",
+                    "success": "#0bda5b",
+                    "warning": "#ffb020",
+                    "danger": "#fa6238",
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+            },
+        },
+    }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen overflow-hidden flex">
+<!-- Left Navigation Bar -->
+<nav class="w-64 h-screen bg-background-dark border-r border-surface-highlight flex-shrink-0 flex flex-col justify-between">
+<div class="flex flex-col gap-4 p-4">
+<div class="flex gap-3 items-center mb-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 border-2 border-primary/20" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAptZZOn9q_HWPNEyTL_agrG2SgvVj6uhqA9UbMTkmxlrBX9PTOeZPjvkh41QAISFDHUR4H9rxKcJQJ3ZYvAkcOMsiSWMPtXkX9ppiyqfhF1cLRqorlWHN-lzub9rC1Gf2p9xXOlSY2mXEeXD6rE32YxccTKgMYoEGEKu23JieoPkhj_XbcTZhywwRnoCEPJ03Tvhiwui658UMh47NrNAaBcHiYPigA99pbbajKTbWYqqo-19W-DG1xWKtFmqtopNCfyVhyhbzR9wq3");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-bold leading-normal">Ops Center</h1>
+<p class="text-text-secondary text-xs font-normal leading-normal">SRE Team Alpha</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Overview</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">warning</span>
+<p class="text-sm font-medium leading-normal">Incidents</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">dns</span>
+<p class="text-sm font-medium leading-normal">Services</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<p class="text-sm font-medium leading-normal">Alerts</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<p class="text-sm font-medium leading-normal">Metrics</p>
+</a>
+</div>
+</div>
+<div class="p-4 border-t border-surface-highlight">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between border-b border-surface-highlight bg-background-dark/95 backdrop-blur px-6 py-3 flex-shrink-0 z-10">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h2 class="text-lg font-bold tracking-tight">Platform Ops Command Center</h2>
+</div>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-lg">search</span>
+<input class="w-full bg-surface-dark border-none rounded-lg py-2 pl-10 pr-4 text-sm text-white placeholder-text-secondary focus:ring-1 focus:ring-primary" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-text-secondary hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-danger"></span>
+</button>
+<div class="h-6 w-px bg-surface-highlight"></div>
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+<span>New Incident</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Central Dashboard -->
+<div class="flex-1 overflow-y-auto p-6 scrollbar-hide">
+<!-- KPI Cards -->
+<div class="grid grid-cols-4 gap-4 mb-6">
+<!-- Card 1 -->
+<div class="bg-surface-dark border border-surface-highlight rounded-lg p-5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-danger">crisis_alert</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider mb-1">Active Incidents (Crit)</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">12</h3>
+<span class="text-danger text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-sm">arrow_upward</span> 20%
+                            </span>
+</div>
+<div class="mt-4 h-10 w-full opacity-60">
+<!-- Simulated Sparkline -->
+<svg class="w-full h-full stroke-danger fill-none stroke-2" preserveaspectratio="none" viewbox="0 0 100 25">
+<path d="M0 20 L10 18 L20 22 L30 15 L40 10 L50 12 L60 5 L70 8 L80 4 L90 10 L100 2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-dark border border-surface-highlight rounded-lg p-5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-warning">health_and_safety</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider mb-1">Services at Risk (SLO)</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">3</h3>
+<span class="text-text-secondary text-sm font-medium">0% change</span>
+</div>
+<div class="mt-4 h-10 w-full opacity-60">
+<svg class="w-full h-full stroke-warning fill-none stroke-2" preserveaspectratio="none" viewbox="0 0 100 25">
+<path d="M0 20 L15 20 L30 18 L45 20 L60 15 L75 12 L90 14 L100 12" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-dark border border-surface-highlight rounded-lg p-5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider mb-1">Alert Volume (24h)</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">1,450</h3>
+<span class="text-success text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-sm">arrow_downward</span> 5%
+                            </span>
+</div>
+<div class="mt-4 h-10 w-full opacity-60">
+<svg class="w-full h-full stroke-primary fill-none stroke-2" preserveaspectratio="none" viewbox="0 0 100 25">
+<path d="M0 15 L10 12 L20 18 L30 10 L40 14 L50 20 L60 15 L70 12 L80 18 L90 10 L100 5" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-dark border border-surface-highlight rounded-lg p-5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-success">timer</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider mb-1">MTTR (Avg)</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">45m</h3>
+<span class="text-success text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-sm">arrow_downward</span> 10%
+                            </span>
+</div>
+<div class="mt-4 h-10 w-full opacity-60">
+<svg class="w-full h-full stroke-success fill-none stroke-2" preserveaspectratio="none" viewbox="0 0 100 25">
+<path d="M0 5 L20 10 L40 8 L60 15 L80 18 L100 20" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Service Health Heatmap -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3 px-1">
+<h3 class="text-white text-lg font-bold">Service Health Heatmap</h3>
+<div class="flex gap-2 text-xs">
+<span class="flex items-center gap-1 text-text-secondary"><span class="w-2 h-2 rounded-full bg-success"></span> Healthy</span>
+<span class="flex items-center gap-1 text-text-secondary"><span class="w-2 h-2 rounded-full bg-warning"></span> Warning</span>
+<span class="flex items-center gap-1 text-text-secondary"><span class="w-2 h-2 rounded-full bg-danger"></span> Critical</span>
+</div>
+</div>
+<div class="grid grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+<!-- Heatmap Items -->
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Auth Service</p>
+<p class="text-text-secondary text-xs mt-1">99.99% Avail</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-danger rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Payment Gateway</p>
+<p class="text-danger text-xs mt-1">High Latency</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">User Profile</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-warning rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Inventory DB</p>
+<p class="text-warning text-xs mt-1">Slow Queries</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Search API</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Notification Svc</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Order History</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-danger rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Checkout UI</p>
+<p class="text-danger text-xs mt-1">500 Errors</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">CDN West</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-warning rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Legacy API</p>
+<p class="text-warning text-xs mt-1">Deprecation</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Fraud Detection</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+<div class="bg-surface-dark border-l-4 border-success rounded rouded-l-none p-3 hover:bg-surface-highlight cursor-pointer transition-colors shadow-sm">
+<p class="text-white font-medium text-sm truncate">Loyalty Svc</p>
+<p class="text-text-secondary text-xs mt-1">Healthy</p>
+</div>
+</div>
+</div>
+<!-- Top Incident List -->
+<div class="bg-surface-dark border border-surface-highlight rounded-lg overflow-hidden flex flex-col">
+<div class="flex items-center justify-between p-4 border-b border-surface-highlight bg-surface-highlight/30">
+<h3 class="text-white text-lg font-bold">Top Incidents</h3>
+<a class="text-primary text-sm font-medium hover:text-primary/80" href="#">View All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-highlight text-text-secondary text-xs uppercase tracking-wider">
+<th class="p-4 font-medium">Priority</th>
+<th class="p-4 font-medium">Title</th>
+<th class="p-4 font-medium">Service</th>
+<th class="p-4 font-medium">Owner</th>
+<th class="p-4 font-medium">Status</th>
+<th class="p-4 font-medium">Time</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-surface-highlight">
+<tr class="hover:bg-surface-highlight/50 transition-colors">
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-danger/20 text-danger border border-danger/30">
+                                            P1
+                                        </span>
+</td>
+<td class="p-4 text-white font-medium">Payment Gateway Latency Spike &gt; 500ms</td>
+<td class="p-4 text-text-secondary">Payment Gateway</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-6 w-6 rounded-full bg-cover bg-center" data-alt="Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBaaKSe09_jDhSfs-rXQlXZw9aX9GN7sbmAG8hweApHEf-AMznltXiAbRv10xI7_A_vXxRSun8m3xW2fsiD9JBXqeqDtgu7nZcenjTpy8eV8AnY9WbITwjDMM5nbZT2NQphk3eh3QuCEaWKEZuMuJZ0vT8smTUJy3jUIKVMy3v0nrHL5gk4Ku9M_3HesrlSW98fuiZqKxcINTCKy5u_MSJJ1wQiUjB8WnLaZ_UJY77kX5_FgqpGrbdnYJfwXLpHzRJBIQg3alkl8_nS");'></div>
+<span class="text-white">Sarah Jenkins</span>
+</div>
+</td>
+<td class="p-4">
+<span class="text-danger flex items-center gap-1 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-danger animate-pulse"></span> Critical</span>
+</td>
+<td class="p-4 text-text-secondary">12m ago</td>
+</tr>
+<tr class="hover:bg-surface-highlight/50 transition-colors">
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-danger/20 text-danger border border-danger/30">
+                                            P1
+                                        </span>
+</td>
+<td class="p-4 text-white font-medium">Checkout UI Returning 502 Errors</td>
+<td class="p-4 text-text-secondary">Checkout UI</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-6 w-6 rounded-full bg-cover bg-center" data-alt="Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuByFrqWOwuv1Kkx4Q7iRQhpvHmQDDoJ8wBj2d1kCzQ0h2kwqjZzQCxqffgeQEvoclKhO9bkZ7Ph8kTpoQtu-B8htVVBkLHbKG2g7fUHKXlVcbp9qvmzY0ZOCKmS5bf1A5P6xrPDgWaN4ti1vEkUEEPLeq4yYnHMvjt-JjmfH1_baylBsXhh8ftYravqNlGpfAYB5hJFrlh-KprRV7JDGPaLkP_XkAwmLh2evI0vCt_3-lv7wA1KC20hbvZ-p6X_A4Exl9Bj9xjqLmby");'></div>
+<span class="text-white">Mike Ross</span>
+</div>
+</td>
+<td class="p-4">
+<span class="text-danger flex items-center gap-1 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-danger animate-pulse"></span> Investigating</span>
+</td>
+<td class="p-4 text-text-secondary">45m ago</td>
+</tr>
+<tr class="hover:bg-surface-highlight/50 transition-colors">
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-warning/20 text-warning border border-warning/30">
+                                            P2
+                                        </span>
+</td>
+<td class="p-4 text-white font-medium">Inventory Database High CPU Usage</td>
+<td class="p-4 text-text-secondary">Inventory DB</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-6 w-6 rounded-full bg-cover bg-center" data-alt="Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8YaiWZlrro8fhfNqp6J1V8AGBQxcRRfPhNdVtDQ4LiuCaKGmrcO7Ud9n7vW7mxk9u-lFNe2v1h7kaJyhUVtqSE-TyAE0MeD7G3mwfbcZ6W2BggejAlBVLQty5gznkCQ8RDu9jkgPmeKASp4J1wXQF3jEqH5d4kIBBio83P39OwxG7wF81SFmVq-ocAnG5s5-pqkhIiPEUmrc-93rKjPvYlIDKQh-2f6JC962Ug1dJUtA4QJIHOQJzYcoLjIVpSRcWqLNk9VHabblp");'></div>
+<span class="text-white">Alex Chen</span>
+</div>
+</td>
+<td class="p-4">
+<span class="text-warning flex items-center gap-1 font-medium">Monitoring</span>
+</td>
+<td class="p-4 text-text-secondary">2h ago</td>
+</tr>
+<tr class="hover:bg-surface-highlight/50 transition-colors">
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-warning/20 text-warning border border-warning/30">
+                                            P2
+                                        </span>
+</td>
+<td class="p-4 text-white font-medium">Legacy API Deprecation Warning Trigger</td>
+<td class="p-4 text-text-secondary">Legacy API</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-6 w-6 rounded-full bg-cover bg-center" data-alt="Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDJVH8nLyuX10qsReBUgbn2_CfUeAdqziUZpe7Ch3vunxCCOUYTPG9Wb5MGBn_7rOg5NYeCIcuodTyYu5I4-vnp2chJA5HQfnfwwZbr4LFGyKCh5b5PmJGSUVuqqE404hiA-uku-EF0Zkd4i1a3YwT_xrXyklYMnmikS1Cd_6NQp4pXL6yCTVc-DET_0wcgHEnRdWO1Ak-eGjKLxHMPikSozQoMQRmekRq7HiMWtyvN-N54YhC-x1MuOaPEzZpod39s_jpR0cK6KXdy");'></div>
+<span class="text-white">Jessica Pearson</span>
+</div>
+</td>
+<td class="p-4">
+<span class="text-warning flex items-center gap-1 font-medium">Acknowledged</span>
+</td>
+<td class="p-4 text-text-secondary">4h ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: AI Briefing -->
+<aside class="w-80 bg-surface-dark border-l border-surface-highlight flex-shrink-0 flex flex-col overflow-y-auto">
+<div class="p-5 border-b border-surface-highlight flex items-center gap-2 bg-gradient-to-r from-surface-dark to-primary/10">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h3 class="text-white font-bold text-lg">AI Briefing</h3>
+</div>
+<div class="p-5 flex flex-col gap-6">
+<!-- Insight Block 1 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<h4 class="text-white font-medium text-sm">Deployment Correlation</h4>
+<span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded-full uppercase font-bold">New</span>
+</div>
+<p class="text-text-secondary text-sm leading-relaxed">
+                            Detected a strong correlation between recent P1 incidents in <span class="text-white font-medium">Payment Gateway</span> and deployment <span class="font-mono text-xs bg-surface-highlight px-1 rounded text-white">#v4.2.1</span>.
+                        </p>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded border border-surface-highlight bg-surface-highlight/20 text-xs text-text-secondary hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">code</span> Jenkins
+                            </span>
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded border border-surface-highlight bg-surface-highlight/20 text-xs text-text-secondary hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">terminal</span> Splunk Logs
+                            </span>
+</div>
+</div>
+<div class="h-px bg-surface-highlight"></div>
+<!-- Insight Block 2 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<h4 class="text-white font-medium text-sm">Capacity Risk</h4>
+<span class="text-[10px] bg-warning/20 text-warning px-2 py-0.5 rounded-full uppercase font-bold">Warning</span>
+</div>
+<p class="text-text-secondary text-sm leading-relaxed">
+<span class="text-white font-medium">Inventory DB</span> is projected to run out of storage in 4 hours based on current write volume surge (+45%).
+                        </p>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded border border-surface-highlight bg-surface-highlight/20 text-xs text-text-secondary hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">database</span> Mongo Metrics
+                            </span>
+</div>
+<button class="mt-2 text-xs text-primary font-medium text-left hover:underline">Run capacity expansion playbook</button>
+</div>
+<div class="h-px bg-surface-highlight"></div>
+<!-- Insight Block 3 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<h4 class="text-white font-medium text-sm">Recurring Pattern</h4>
+</div>
+<p class="text-text-secondary text-sm leading-relaxed">
+                            Similar alerts were observed last week on Tuesday. Root cause was identified as a third-party API timeout.
+                        </p>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded border border-surface-highlight bg-surface-highlight/20 text-xs text-text-secondary hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">history</span> INC-3902
+                            </span>
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded border border-surface-highlight bg-surface-highlight/20 text-xs text-text-secondary hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">confirmation_number</span> ServiceNow
+                            </span>
+</div>
+</div>
+<!-- Recommendation Box -->
+<div class="mt-4 p-4 rounded-lg bg-primary/10 border border-primary/20">
+<div class="flex gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">lightbulb</span>
+<span class="text-xs font-bold text-primary uppercase">Recommended Action</span>
+</div>
+<p class="text-white text-sm font-medium">Rollback Payment Gateway to v4.2.0</p>
+<div class="flex gap-2 mt-3">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-white text-xs font-medium py-1.5 rounded transition-colors">Execute</button>
+<button class="flex-1 bg-surface-highlight hover:bg-surface-highlight/80 text-white text-xs font-medium py-1.5 rounded transition-colors">Ignore</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>
